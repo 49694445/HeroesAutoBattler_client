@@ -1,0 +1,7 @@
+patches:
+  "1.16.2":
+    - patch_file: "patches/apple-pre-2019.diff"
+      patch_description: |
+        Fixes errors for older apple targets:
+        error: 'basic_fstream' is unavailable: introduced in macOS 10.15
+        error: 'basic_fstream' is unavailable: introduced in iOS 13.0

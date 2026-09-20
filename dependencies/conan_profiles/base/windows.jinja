@@ -1,0 +1,12 @@
+# https://walbourn.github.io/a-brief-history-of-windows-sdks/
+# https://learn.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt
+# https://learn.microsoft.com/en-us/windows/win32/WinProg/using-the-windows-headers
+
+{% macro set_defines(WIN32_WINNT, NTDDI) %}
+    {% set win_defines = [
+        '_WIN32_WINNT={}'.format(WIN32_WINNT),
+        'WINVER={}'.format(WIN32_WINNT),
+        'NTDDI_VERSION={}'.format(NTDDI),
+    ] %}
+    tools.build:defines={{ win_defines + (varargs | list) }}
+{% endmacro %}

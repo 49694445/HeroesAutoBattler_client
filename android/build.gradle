@@ -1,0 +1,32 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+	repositories {
+		google()
+		mavenCentral()
+		maven {
+			url 'https://www.jitpack.io'
+		}
+	}
+	dependencies {
+		classpath 'com.android.tools.build:gradle:8.11.0'
+		classpath 'com.github.zellius:android-shortcut-gradle-plugin:0.1.2'
+
+		// NOTE: Do not place your application dependencies here; they belong
+		// in the individual module build.gradle files
+	}
+}
+
+allprojects {
+	apply from: rootProject.file("defs.gradle")
+}
+
+// Qt 5 androiddeployqt scans this file for the replacement of its obsolete AGP option.
+subprojects {
+	plugins.withId('com.android.application') {
+		android.packagingOptions.jniLibs.useLegacyPackaging = true
+	}
+}
+
+task clean(type: Delete) {
+	delete rootProject.buildDir
+}

@@ -1,0 +1,148 @@
+name: VCMI - dependencies
+
+on:
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .github/workflows/releaseFromRun.yml
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: mac-intel
+            os: macos-15
+            before_install: macos.sh
+          - platform: mac-arm
+            os: macos-15
+            before_install: macos.sh
+          - platform: ios
+            os: macos-15
+            before_install: macos.sh
+          - platform: android-armeabi-v7a
+            os: ubuntu-latest
+            before_install: android-32.sh
+          - platform: android-arm64-v8a
+            os: ubuntu-latest
+          - platform: android-x64
+            os: ubuntu-latest
+          - platform: windows-x64
+            os: windows-latest
+          - platform: windows-x86
+            os: windows-latest
+          - platform: windows-arm64
+            os: windows-11-arm
+          - platform: linux-x64
+            os: ubuntu-24.04
+          - platform: linux-arm64
+            os: ubuntu-24.04-arm
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+    - name: Checkout current
+      uses: actions/checkout@v4
+
+    - name: Define common variables
+      run: |
+        echo BUILD_PLATFORM="${{ matrix.platform }}" >> "$GITHUB_ENV"
+        echo DEPS_FILE="dependencies-${{ matrix.platform }}.txz" >> "$GITHUB_ENV"
+        echo DEPS_LIST_FILE="dependencies-${{ matrix.platform }}.txt" >> "$GITHUB_ENV"
+
+    - name: Prepare CI
+      if: ${{ matrix.before_install }}
+      run: ci/${{ matrix.before_install }}
+
+    - name: Obtain path to the Windows-aware Perl
+      if: ${{ startsWith(matrix.platform, 'windows') }}
+      run: |
+        windowsPerl=$(which -a perl | fgrep Strawberry)
+        echo "WINDOWS_PERL_DIR=$(dirname "$windowsPerl")" >> "$GITHUB_ENV"
+
+    - uses: actions/setup-java@v4
+      if: ${{ startsWith(matrix.platform, 'android') }}
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Conan Client
+      run: |
+        pipx install conan
+        conan profile detect
+
+    - name: Prepare platform tools
+      run: |
+        BUILD_ACTION=prepare ./build.sh >> "$GITHUB_ENV"
+
+    - name: Configure MSYS2
+      if: ${{ startsWith(matrix.platform, 'windows') && matrix.platform != 'windows-arm64' }}
+      shell: pwsh
+      run: |
+        $msysBash = "C:\msys64\usr\bin\bash.exe"
+        $platformToolsPath = Join-Path -Path $env:RUNNER_TEMP -ChildPath platformTools
+
+        # appends to [conf]
+        Add-Content -Path $platformToolsPath -Value @"
+        tools.microsoft.bash:path=$msysBash
+        tools.microsoft.bash:subsystem=msys2
+        "@
+
+        Invoke-Expression "& $msysBash -l -c 'pacman -S base-devel gcc --noconfirm'"
+
+    - name: Install system libs recipes
+      run: |
+        BUILD_ACTION=install_system_libs ./build.sh
+
+    - name: Build recipes with our patches
+      run: |
+        BUILD_ACTION=build_recipes_with_patches ./build.sh
+
+    - name: Build ONNX with our patches
+      run: |
+        BUILD_ACTION=build_onnx_recipes_with_patches ./build.sh
+
+    - name: Build recipes from PR changes
+      run: |
+        BUILD_ACTION=build_recipes_from_cci_pull_requests ./build.sh
+
+    - name: Build the rest of the dependencies
+      run: |
+        BUILD_ACTION=build_normal_recipes ./build.sh
+
+    - name: Remove builds and source code
+      run: conan cache clean
+
+    - name: Remove build requirements' binaries
+      run: |
+        BUILD_ACTION=remove_build_requirements_binaries ./build.sh
+
+    - name: Create list of built packages
+      run: |
+        packageList="$(conan list --format=compact | tail -n +2)"
+        echo "$packageList" > "$DEPS_LIST_FILE"
+        echo "CONAN_PACKAGES<<EOF
+        $packageList
+        EOF" >> "$GITHUB_ENV"
+
+    - name: Create dependencies archive
+      run: conan cache save --file "$DEPS_FILE" "*:*"
+
+    - name: Upload binaries list
+      uses: actions/upload-artifact@v4
+      with:
+        name: list of dependencies-${{ matrix.platform }}
+        path: ${{ env.DEPS_LIST_FILE }}
+    - name: Upload binaries
+      uses: actions/upload-artifact@v4
+      with:
+        name: dependencies-${{ matrix.platform }}
+        compression-level: 0
+        path: ${{ env.DEPS_FILE }}

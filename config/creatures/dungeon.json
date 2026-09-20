@@ -1,0 +1,553 @@
+{
+	"troglodyte" :
+	{
+		"index": 70,
+		"level": 1,
+		"faction": "dungeon",
+		"abilities":
+		{
+			"blindImmunity" : 
+			{
+				"type" : "SPELL_IMMUNITY",
+				"subtype" : "spell.blind"
+			},
+			"petrifyImmunity" : 
+			{
+				"type" : "SPELL_IMMUNITY",
+				"subtype" : "spell.stoneGaze"
+			}
+		},
+		"upgrades": ["infernalTroglodyte"],
+		"hasDoubleWeek": true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:140",
+			"mapAttackFromLeft": "AvWattak.def:0:141",
+			"animation": "CTROGL.DEF"
+		},
+		"sound" :
+		{
+			"attack": "TROGATTK.wav",
+			"defend": "TROGDFND.wav",
+			"killed": "TROGKILL.wav",
+			"move": "TROGMOVE.wav",
+			"wince": "TROGWNCE.wav"
+		}
+	},
+	"infernalTroglodyte" :
+	{
+		"index": 71,
+		"level": 1,
+		"faction": "dungeon",
+		"abilities":
+		{
+			"blindImmunity" : 
+			{
+				"type" : "SPELL_IMMUNITY",
+				"subtype" : "spell.blind"
+			},
+			"petrifyImmunity" : 
+			{
+				"type" : "SPELL_IMMUNITY",
+				"subtype" : "spell.stoneGaze"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:142",
+			"mapAttackFromLeft": "AvWattak.def:0:143",
+			"animation": "CITROG.DEF"
+		},
+		"sound" :
+		{
+			"attack": "ITRGATTK.wav",
+			"defend": "ITRGDFND.wav",
+			"killed": "ITRGKILL.wav",
+			"move": "ITRGMOVE.wav",
+			"wince": "ITRGWNCE.wav"
+		}
+	},
+	"harpy" :
+	{
+		"index": 72,
+		"level": 2,
+		"faction": "dungeon",
+		"abilities":
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"strikeAndReturn" : 
+			{
+				"type" : "RETURN_AFTER_STRIKE"
+			}
+		},
+		"upgrades": ["harpyHag"],
+		"hasDoubleWeek": true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:144",
+			"mapAttackFromLeft": "AvWattak.def:0:145",
+			"animation": "CHARPY.DEF"
+		},
+		"sound" :
+		{
+			"attack": "HARPATTK.wav",
+			"defend": "HARPDFND.wav",
+			"killed": "HARPKILL.wav",
+			"move": "HARPMOVE.wav",
+			"wince": "HARPWNCE.wav"
+		}
+	},
+	"harpyHag" :
+	{
+		"index": 73,
+		"level": 2,
+		"faction": "dungeon",
+		"abilities":
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"strikeAndReturn" : 
+			{
+				"type" : "RETURN_AFTER_STRIKE"
+			},
+			"noRetaliation" : 
+			{
+				"type" : "BLOCKS_RETALIATION"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:146",
+			"mapAttackFromLeft": "AvWattak.def:0:147",
+			"animation": "CHARPH.DEF"
+		},
+		"sound" :
+		{
+			"attack": "HHAGATTK.wav",
+			"defend": "HHAGDFND.wav",
+			"killed": "HHAGKILL.wav",
+			"move": "HHAGMOVE.wav",
+			"shoot": "HHAGSHOT.wav",
+			"wince": "HHAGWNCE.wav"
+		}
+	},
+	"beholder" :
+	{
+		"index": 74,
+		"level": 3,
+		"faction": "dungeon",
+		"upgrades": ["evilEye"],
+		"shots" : 12,
+		"abilities" :
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"noMeleePenalty" :
+			{
+				"type" : "NO_MELEE_PENALTY"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:148",
+			"mapAttackFromLeft": "AvWattak.def:0:149",
+			"animation": "CBEHOL.DEF",
+			"missile" :
+			{
+				"ray" :
+				[
+					{ "start" : [ 160, 160, 160, 255 ], "end" : [ 160, 160, 160,  64 ] },
+					{ "start" : [ 192, 192, 192, 255 ], "end" : [ 192, 192, 192, 128 ] },
+					{ "start" : [ 224, 224, 224, 255 ], "end" : [ 224, 224, 224, 255 ] },
+					{ "start" : [ 192, 192, 192, 255 ], "end" : [ 192, 192, 192, 128 ] },
+					{ "start" : [ 160, 160, 160, 255 ], "end" : [ 160, 160, 160,  64 ] }
+				]
+			}
+		},
+		"sound" :
+		{
+			"attack": "BHDRATTK.wav",
+			"defend": "BHDRDFND.wav",
+			"killed": "BHDRKILL.wav",
+			"move": "BHDRMOVE.wav",
+			"shoot": "BHDRSHOT.wav",
+			"wince": "BHDRWNCE.wav"
+		}
+	},
+	"evilEye" :
+	{
+		"index": 75,
+		"level": 3,
+		"faction": "dungeon",
+		"shots" : 24,
+		"abilities" :
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"noMeleePenalty" :
+			{
+				"type" : "NO_MELEE_PENALTY"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:150",
+			"mapAttackFromLeft": "AvWattak.def:0:151",
+			"animation": "CEVEYE.DEF",
+			"missile" :
+			{
+				"ray" :
+				[
+					{ "start" : [ 160, 160, 160, 255 ], "end" : [ 160, 160, 160,  64 ] },
+					{ "start" : [ 192, 192, 192, 255 ], "end" : [ 192, 192, 192, 128 ] },
+					{ "start" : [ 224, 224, 224, 255 ], "end" : [ 224, 224, 224, 255 ] },
+					{ "start" : [ 192, 192, 192, 255 ], "end" : [ 192, 192, 192, 128 ] },
+					{ "start" : [ 160, 160, 160, 255 ], "end" : [ 160, 160, 160,  64 ] }
+				]
+			}
+		},
+		"sound" :
+		{
+			"attack": "EVLIATTK.wav",
+			"defend": "EVLIDFND.wav",
+			"killed": "EVLIKILL.wav",
+			"move": "EVLIMOVE.wav",
+			"shoot": "EVLISHOT.wav",
+			"wince": "EVLIWNCE.wav"
+		}
+	},
+	"medusa" :
+	{
+		"index": 76,
+		"level": 4,
+		"faction": "dungeon",
+		"doubleWide" : true,
+		"shots" : 4,
+		"abilities":
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"noMeleePenalty" :
+			{
+				"type" : "NO_MELEE_PENALTY"
+			},
+			"petrification" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.stoneGaze",
+				"val" : 20,
+				"addInfo" : [0,2]
+			}
+		},
+		"upgrades": ["medusaQueen"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:152",
+			"mapAttackFromLeft": "AvWattak.def:0:153",
+			"animation": "CMEDUS.DEF",
+			"missile" :
+			{
+				"projectile": "PMEDUSX.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "MEDUATTK.wav",
+			"defend": "MEDUDFND.wav",
+			"killed": "MEDUKILL.wav",
+			"move": "MEDUMOVE.wav",
+			"shoot": "MEDUSHOT.wav",
+			"wince": "MEDUWNCE.wav"
+		}
+	},
+	"medusaQueen" :
+	{
+		"index": 77,
+		"level": 4,
+		"faction": "dungeon",
+		"doubleWide" : true,
+		"shots" : 8,
+		"abilities":
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"noMeleePenalty" :
+			{
+				"type" : "NO_MELEE_PENALTY"
+			},
+			"petrification" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.stoneGaze",
+				"val" : 20,
+				"addInfo" : [0,2]
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:154",
+			"mapAttackFromLeft": "AvWattak.def:0:155",
+			"animation": "CMEDUQ.DEF",
+			"missile" :
+			{
+				"projectile": "PMEDUSX.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "MEDQATTK.wav",
+			"defend": "MEDQDFND.wav",
+			"killed": "MEDQKILL.wav",
+			"move": "MEDQMOVE.wav",
+			"shoot": "MEDQSHOT.wav",
+			"wince": "MEDQWNCE.wav"
+		}
+	},
+	"minotaur" :
+	{
+		"index": 78,
+		"level": 5,
+		"faction": "dungeon",
+		"abilities": 
+		{
+			"fearless" :
+			{
+				"type" : "MORALE",
+				"val" : 1,
+				"valueType" : "INDEPENDENT_MAX"
+			}
+		 },
+		"upgrades": ["minotaurKing"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:156",
+			"mapAttackFromLeft": "AvWattak.def:0:157",
+			"animation": "CMINOT.DEF"
+		},
+		"sound" :
+		{
+			"attack": "MINOATTK.wav",
+			"defend": "MINODFND.wav",
+			"killed": "MINOKILL.wav",
+			"move": "MINOMOVE.wav",
+			"wince": "MINOWNCE.wav"
+		}
+	},
+	"minotaurKing" :
+	{
+		"index": 79,
+		"level": 5,
+		"faction": "dungeon",
+		"abilities":
+		{
+			"fearless" :
+			{
+				"type" : "MORALE",
+				"val" : 1,
+				"valueType" : "INDEPENDENT_MAX"
+			}
+		 },
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:158",
+			"mapAttackFromLeft": "AvWattak.def:0:159",
+			"animation": "CMINOK.DEF"
+		},
+		"sound" :
+		{
+			"attack": "MINKATTK.wav",
+			"defend": "MINKDFND.wav",
+			"killed": "MINKKILL.wav",
+			"move": "MINKMOVE.wav",
+			"shoot": "MINKSHOT.wav",
+			"wince": "MINKWNCE.wav"
+		}
+	},
+	"manticore" :
+	{
+		"index": 80,
+		"level": 6,
+		"faction": "dungeon",
+		"upgrades": ["scorpicore"],
+		"doubleWide" : true,
+		"abilities" :
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:160",
+			"mapAttackFromLeft": "AvWattak.def:0:161",
+			"animation": "CMCORE.DEF"
+		},
+		"sound" :
+		{
+			"attack": "MANTATTK.wav",
+			"defend": "MANTDFND.wav",
+			"killed": "MANTKILL.wav",
+			"move": "MANTMOVE.wav",
+			"shoot": "MANTSHOT.wav",
+			"wince": "MANTWNCE.wav"
+		}
+	},
+	"scorpicore" :
+	{
+		"index": 81,
+		"level": 6,
+		"faction": "dungeon",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"paralize" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.paralyze",
+				"val" : 20
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:162",
+			"mapAttackFromLeft": "AvWattak.def:0:163",
+			"animation": "CCMCOR.DEF"
+		},
+		"sound" :
+		{
+			"attack": "SCRPATTK.wav",
+			"defend": "SCRPDFND.wav",
+			"killed": "SCRPKILL.wav",
+			"move": "SCRPMOVE.wav",
+			"shoot": "SCRPSHOT.wav",
+			"wince": "SCRPWNCE.wav"
+		}
+	},
+	"redDragon" :
+	{
+		"index": 82,
+		"level": 7,
+		"faction": "dungeon",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"dragon" : 
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"dragonSkeleton" : 
+			{
+				"type" : "SKELETON_TRANSFORMER_TARGET",
+				"subtype" : "boneDragon"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"twoHexAttackBreath" :
+			{
+				"type" : "TWO_HEX_ATTACK_BREATH"
+			},
+			"spellImmunity" :
+			{
+				"type" : "LEVEL_SPELL_IMMUNITY",
+				"val" : 3
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			}
+		},
+		"upgrades": ["blackDragon"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:164",
+			"mapAttackFromLeft": "AvWattak.def:0:165",
+			"animation": "CRDRGN.DEF"
+		},
+		"sound" :
+		{
+			"attack": "RDDRATTK.wav",
+			"defend": "RDDRDFND.wav",
+			"killed": "RDDRKILL.wav",
+			"move": "RDDRMOVE.wav",
+			"wince": "RDDRWNCE.wav"
+		}
+	},
+	"blackDragon" :
+	{
+		"index": 83,
+		"level": 7,
+		"faction": "dungeon",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"dragon" : 
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"dragonSkeleton" : 
+			{
+				"type" : "SKELETON_TRANSFORMER_TARGET",
+				"subtype" : "boneDragon"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"twoHexAttackBreath" :
+			{
+				"type" : "TWO_HEX_ATTACK_BREATH"
+			},
+			"spellImmunity" :
+			{
+				"type" : "LEVEL_SPELL_IMMUNITY",
+				"val" : 5
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			},
+			"hateTitans" :
+			{
+				"type" : "HATE",
+				"subtype" : "creature.titan",
+				"val" : 50
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:166",
+			"mapAttackFromLeft": "AvWattak.def:0:167",
+			"animation": "CBDRGN.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BKDRATTK.wav",
+			"defend": "BKDRDFND.wav",
+			"killed": "BKDRKILL.wav",
+			"move": "BKDRMOVE.wav",
+			"wince": "BKDRWNCE.wav"
+		}
+	}
+}

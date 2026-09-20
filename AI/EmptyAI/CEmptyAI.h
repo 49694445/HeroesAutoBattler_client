@@ -1,0 +1,54 @@
+/*
+ * CEmptyAI.h, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+#pragma once
+
+#include "../../lib/callback/CGlobalAI.h"
+
+struct HeroMoveDetails;
+
+class CEmptyAI : public CGlobalAI
+{
+protected:
+	std::shared_ptr<CCallback> cb;
+
+public:
+	void initGameInterface(std::shared_ptr<Environment> ENV, std::shared_ptr<CCallback> CB) override;
+	void yourTurn(QueryID queryID) override;
+	void yourTacticPhase(const BattleID & battleID, int distance) override;
+	void activeStack(const BattleID & battleID, const CStack * stack) override;
+	void heroGotLevel(const CGHeroInstance *hero, PrimarySkill pskill, std::vector<SecondarySkill> &skills, QueryID queryID) override;
+	void commanderGotLevel (const CCommanderInstance * commander, std::vector<ui32> skills, QueryID queryID) override;
+	void showBlockingDialog(const std::string &text, const std::vector<Component> &components, QueryID askID, const int soundID, bool selection, bool cancel, bool safeToAutoaccept) override;
+	void showTeleportDialog(const CGHeroInstance * hero, TeleportChannelID channel, TTeleportExitsList exits, bool impassable, QueryID askID) override;
+	void showGarrisonDialog(const CArmedInstance * up, const CGHeroInstance * down, bool removableUnits, QueryID queryID, const MetaString & customTitle) override;
+	void showMapObjectSelectDialog(QueryID askID, const Component & icon, const MetaString & title, const MetaString & description, const std::vector<ObjectInstanceID> & objects) override;
+	std::optional<BattleAction> makeSurrenderRetreatDecision(const BattleID & battleID, const BattleStateInfoForRetreat & battleState) override;
+};
+
+// Public protocol adapter for arena rooms whose deployment AI runs on the
+// server. Combat is installed separately (BattleAI/MMAI) by the client.
+class CServerDrivenArenaAI : public CEmptyAI
+{
+	bool deploymentActive = false;
+	bool turnAcknowledged = false;
+	bool draftResolved = false;
+	int deploymentDay = 0;
+	int readyDay = 0;
+	bool autoReadyTestPlayer() const;
+	void tryTestReady();
+
+public:
+	void yourTurn(QueryID queryID) override;
+	void arenaDeploymentState(const ArenaDeploymentStarted & pack) override;
+	void arenaArtifactDraftState(const ArenaArtifactDraftSelection & pack) override;
+	void gameOver(PlayerColor player, const EVictoryLossCheckResult & result) override;
+};
+
+#define NAME "EmptyAI 0.1"

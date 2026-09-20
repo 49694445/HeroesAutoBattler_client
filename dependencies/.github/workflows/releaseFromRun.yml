@@ -1,0 +1,60 @@
+name: Create release from Actions run
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Actions run ID which to get artifacts from'
+        required: true
+        type: number
+      is_draft:
+        description: 'If new pre-release will be created as draft'
+        required: true
+        default: false
+        type: boolean
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      LISTS_DIR: lists
+      DEPENDENCIES_DIR: deps
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Download artifacts
+        run: |
+          gh run download ${{ github.event.inputs.run_id }} \
+            --repo ${{ github.repository }} \
+            --dir "$LISTS_DIR" \
+            --pattern "list of*"
+          gh run download ${{ github.event.inputs.run_id }} \
+            --repo ${{ github.repository }} \
+            --dir "$DEPENDENCIES_DIR" \
+            --pattern "dependencies-*"
+
+      - name: Create release
+        shell: python
+        run: |
+          from datetime import date
+          from glob import glob
+          from os import getenv
+          from pathlib import Path
+          from subprocess import run
+
+          releaseNotes = "Generated from [this](https://github.com/${{ github.repository }}/actions/runs/${{ github.event.inputs.run_id }}) Actions run"
+          for packageListPath in sorted(Path(".").glob(f"{getenv("LISTS_DIR")}/**/*.txt")):
+              releaseNotes += f"""
+
+          <details><summary><b>{packageListPath.stem.removeprefix("dependencies-")}</b> packages</summary>
+
+          {open(packageListPath, "r").read()}
+          </details>"""
+
+          tag = str(date.today())
+          dependencies = glob(f"{getenv("DEPENDENCIES_DIR")}/**/*.txz")
+          run([
+              "gh", "release", "create", tag,
+              "--repo", "${{ github.repository }}",
+              "--prerelease",
+              ${{ github.event.inputs.is_draft == 'true' && '"--draft",' || '' }}
+              "--title", tag,
+              "--notes", releaseNotes,
+          ] + dependencies, check=True)

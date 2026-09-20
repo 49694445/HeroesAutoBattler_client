@@ -1,0 +1,1021 @@
+{
+	"creatureBank" : {
+		"index" :16,
+		"handler" : "configurable",
+		"lastReservedIndex" : 6,
+		"base" : {
+			"sounds" : {
+				"visit" : ["ROGUE"]
+			}
+		},
+		"types" : {
+			"cyclopsStockpile" :
+			{
+				"index" : 0,
+				"name" : "Cyclops Stockpile",
+				"aiValue" : 3000,
+				"sounds" : {
+					"ambient" : ["LOOPCAVE"]
+				},
+				"rmg" : {
+					"value"		: 3000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 4, "type" : "cyclop" },
+							{ "amount" : 4, "type" : "cyclop" },
+							{ "amount" : 4, "type" : "cyclop", "upgradeChance" : 50 },
+							{ "amount" : 4, "type" : "cyclop" },
+							{ "amount" : 4, "type" : "cyclop" }
+						],
+
+						"resources" : 
+						{
+							"wood" : 4,
+							"mercury" : 4,
+							"ore" : 4,
+							"sulfur" : 4,
+							"crystal" : 4,
+							"gems" : 4
+						}
+					},
+
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 6, "type" : "cyclop" },
+							{ "amount" : 6, "type" : "cyclop" },
+							{ "amount" : 6, "type" : "cyclop", "upgradeChance" : 50 },
+							{ "amount" : 6, "type" : "cyclop" },
+							{ "amount" : 6, "type" : "cyclop" }
+						],
+						"resources" : 
+						{
+							"wood" : 6,
+							"mercury" : 6,
+							"ore" : 6,
+							"sulfur" : 6,
+							"crystal" : 6,
+							"gems" : 6
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 8, "type" : "cyclop" },
+							{ "amount" : 8, "type" : "cyclop" },
+							{ "amount" : 8, "type" : "cyclop", "upgradeChance" : 50 },
+							{ "amount" : 8, "type" : "cyclop" },
+							{ "amount" : 8, "type" : "cyclop" }
+						],
+						"resources" :
+						{
+							"wood" : 8,
+							"mercury" : 8,
+							"ore" : 8,
+							"sulfur" : 8,
+							"crystal" : 8,
+							"gems" : 8
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 10, "type" : "cyclop" },
+							{ "amount" : 10, "type" : "cyclop" },
+							{ "amount" : 10, "type" : "cyclop", "upgradeChance" : 50 },
+							{ "amount" : 10, "type" : "cyclop" },
+							{ "amount" : 10, "type" : "cyclop" }
+						],
+						"resources" :
+						{
+							"wood" : 10,
+							"mercury" : 10,
+							"ore" : 10,
+							"sulfur" : 10,
+							"crystal" : 10,
+							"gems" : 10
+						}
+					}
+				]
+			},
+			"dwarvenTreasury" : {
+				"index" : 1,
+				"name" : "Dwarven Treasury",
+				"aiValue" : 2000,
+				"sounds" : {
+					"ambient" : ["LOOPDWAR"]
+				},
+				"rmg" : {
+					"value"		: 2000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 10, "type" : "dwarf" },
+							{ "amount" : 10, "type" : "dwarf" },
+							{ "amount" : 10, "type" : "dwarf", "upgradeChance" : 50 },
+							{ "amount" : 10, "type" : "dwarf" },
+							{ "amount" : 10, "type" : "dwarf" }
+						],
+						"resources" :
+						{
+							"crystal" : 2,
+							"gold" : 2500
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 15, "type" : "dwarf" },
+							{ "amount" : 15, "type" : "dwarf" },
+							{ "amount" : 15, "type" : "dwarf", "upgradeChance" : 50 },
+							{ "amount" : 15, "type" : "dwarf" },
+							{ "amount" : 15, "type" : "dwarf" }
+						],
+						"resources" :
+						{
+							"crystal" : 3,
+							"gold" : 4000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 20, "type" : "dwarf" },
+							{ "amount" : 20, "type" : "dwarf" },
+							{ "amount" : 20, "type" : "dwarf", "upgradeChance" : 50 },
+							{ "amount" : 20, "type" : "dwarf" },
+							{ "amount" : 20, "type" : "dwarf" }
+						],
+						"resources" :
+						{
+							"crystal" : 5,
+							"gold" : 5000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 30, "type" : "dwarf" },
+							{ "amount" : 30, "type" : "dwarf" },
+							{ "amount" : 30, "type" : "dwarf", "upgradeChance" : 50 },
+							{ "amount" : 30, "type" : "dwarf" },
+							{ "amount" : 30, "type" : "dwarf" }
+						],
+						"resources" :
+						{
+							"crystal" : 10,
+							"gold" : 7500
+						}
+					}
+				]
+			},
+			"griffinConservatory" : {
+				"index" : 2,
+				"name" : "Griffin Conservatory",
+				"aiValue" : 9000,
+				"sounds" : {
+					"ambient" : ["LOOPGRIF"]
+				},
+				"rmg" : {
+					"value"		: 2000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankWide",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 10, "type" : "griffin" },
+							{ "amount" : 10, "type" : "griffin" },
+							{ "amount" : 10, "type" : "griffin", "upgradeChance" : 50 },
+							{ "amount" : 10, "type" : "griffin" },
+							{ "amount" : 10, "type" : "griffin" }
+						],
+						"creatures" : [ { "amount" : 1, "type" : "angel" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 20, "type" : "griffin" },
+							{ "amount" : 20, "type" : "griffin" },
+							{ "amount" : 20, "type" : "griffin", "upgradeChance" : 50 },
+							{ "amount" : 20, "type" : "griffin" },
+							{ "amount" : 20, "type" : "griffin" }
+						],
+						"creatures" : [ { "amount" : 2, "type" : "angel" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 30, "type" : "griffin" },
+							{ "amount" : 30, "type" : "griffin" },
+							{ "amount" : 30, "type" : "griffin", "upgradeChance" : 50 },
+							{ "amount" : 30, "type" : "griffin" },
+							{ "amount" : 30, "type" : "griffin" }
+						],
+						"creatures" : [ { "amount" : 3, "type" : "angel" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 40, "type" : "griffin" },
+							{ "amount" : 40, "type" : "griffin" },
+							{ "amount" : 40, "type" : "griffin", "upgradeChance" : 50 },
+							{ "amount" : 40, "type" : "griffin" },
+							{ "amount" : 40, "type" : "griffin" }
+						],
+						"creatures" : [ { "amount" : 4, "type" : "angel" } ]
+					}
+				]
+			},
+			"impCache" :  {
+				"compatibilityIdentifiers" : [ "inpCache" ],
+				"index" : 3,
+				"name" : "Imp Cache",
+				"aiValue" : 1500,
+				"sounds" : {
+					"ambient" : ["LOOPFIRE"]
+				},
+				"rmg" : {
+					"value"		: 5000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 20, "type" : "imp" },
+							{ "amount" : 20, "type" : "imp" },
+							{ "amount" : 20, "type" : "imp", "upgradeChance" : 50 },
+							{ "amount" : 20, "type" : "imp" },
+							{ "amount" : 20, "type" : "imp" }
+						],
+						"resources" :
+						{
+							"gold" : 1000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 30, "type" : "imp" },
+							{ "amount" : 30, "type" : "imp" },
+							{ "amount" : 30, "type" : "imp", "upgradeChance" : 50 },
+							{ "amount" : 30, "type" : "imp" },
+							{ "amount" : 30, "type" : "imp" }
+						],
+						"resources" :
+						{
+							"mercury" : 3,
+							"gold" : 1500
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 40, "type" : "imp" },
+							{ "amount" : 40, "type" : "imp" },
+							{ "amount" : 40, "type" : "imp", "upgradeChance" : 50 },
+							{ "amount" : 40, "type" : "imp" },
+							{ "amount" : 40, "type" : "imp" }
+						],
+						"resources" :
+						{
+							"mercury" : 4,
+							"gold" : 2000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 60, "type" : "imp" },
+							{ "amount" : 60, "type" : "imp" },
+							{ "amount" : 60, "type" : "imp", "upgradeChance" : 50 },
+							{ "amount" : 60, "type" : "imp" },
+							{ "amount" : 60, "type" : "imp" }
+						],
+						"resources" :
+						{
+							"mercury" : 6,
+							"gold" : 3000
+						}
+					}
+				]
+			},
+			"medusaStore" : {
+				"index" : 4,
+				"name" : "Medusa Stores",
+				"aiValue" : 1500,
+				"sounds" : {
+					"ambient" : ["LOOPMEDU"]
+				},
+				"rmg" : {
+					"value"		: 1500,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankWide",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 4, "type" : "medusa" },
+							{ "amount" : 4, "type" : "medusa" },
+							{ "amount" : 4, "type" : "medusa", "upgradeChance" : 50 },
+							{ "amount" : 4, "type" : "medusa" },
+							{ "amount" : 4, "type" : "medusa" }
+						],
+						"resources" :
+						{
+							"sulfur" : 5,
+							"gold" : 2000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 6, "type" : "medusa" },
+							{ "amount" : 6, "type" : "medusa" },
+							{ "amount" : 6, "type" : "medusa", "upgradeChance" : 50 },
+							{ "amount" : 6, "type" : "medusa" },
+							{ "amount" : 6, "type" : "medusa" }
+						],
+						"resources" :
+						{
+							"sulfur" : 6,
+							"gold" : 3000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 8, "type" : "medusa" },
+							{ "amount" : 8, "type" : "medusa" },
+							{ "amount" : 8, "type" : "medusa", "upgradeChance" : 50 },
+							{ "amount" : 8, "type" : "medusa" },
+							{ "amount" : 8, "type" : "medusa" }
+						],
+						"resources" :
+						{
+							"sulfur" : 8,
+							"gold" : 4000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 10, "type" : "medusa" },
+							{ "amount" : 10, "type" : "medusa" },
+							{ "amount" : 10, "type" : "medusa", "upgradeChance" : 50 },
+							{ "amount" : 10, "type" : "medusa" },
+							{ "amount" : 10, "type" : "medusa" }
+						],
+						"resources" :
+						{
+							"sulfur" : 10,
+							"gold" : 5000
+						}
+					}
+				]
+			},
+			"nagaBank" : {
+				"index" : 5,
+				"name" : "Naga Bank",
+				"aiValue" : 3000,
+				"sounds" : {
+					"ambient" : ["LOOPNAGA"]
+				},
+				"rmg" : {
+					"value"		: 3000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankWide",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 2, "type" : "naga" },
+							{ "amount" : 2, "type" : "naga" },
+							{ "amount" : 2, "type" : "naga", "upgradeChance" : 50 },
+							{ "amount" : 2, "type" : "naga" },
+							{ "amount" : 2, "type" : "naga" }
+						],
+						"resources" :
+						{
+							"gems" : 8,
+							"gold" : 4000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 3, "type" : "naga" },
+							{ "amount" : 3, "type" : "naga" },
+							{ "amount" : 3, "type" : "naga", "upgradeChance" : 50 },
+							{ "amount" : 3, "type" : "naga" },
+							{ "amount" : 3, "type" : "naga" }
+						],
+						"resources" :
+						{
+							"gems" : 12,
+							"gold" : 6000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 4, "type" : "naga" },
+							{ "amount" : 4, "type" : "naga" },
+							{ "amount" : 4, "type" : "naga", "upgradeChance" : 50 },
+							{ "amount" : 4, "type" : "naga" },
+							{ "amount" : 4, "type" : "naga" }
+						],
+						"resources" :
+						{
+							"gems" : 16,
+							"gold" : 8000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 6, "type" : "naga" },
+							{ "amount" : 6, "type" : "naga" },
+							{ "amount" : 6, "type" : "naga", "upgradeChance" : 50 },
+							{ "amount" : 6, "type" : "naga" },
+							{ "amount" : 6, "type" : "naga" }
+						],
+						"resources" :
+						{
+							"gems" : 24,
+							"gold" : 12000
+						}
+					}
+				]
+			},
+			"dragonFlyHive" : {
+				"index" : 6,
+				"name" : "Dragon Fly Hive",
+				"aiValue" : 9000,
+				"sounds" : {
+					"ambient" : ["LOOPLEAR"]
+				},
+				"rmg" : {
+					"value"		: 9000,
+					"rarity"	: 100
+				},
+				"onGuardedMessage" : 32,
+				"onVisitedMessage" : 33,
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 6, "type" : "fireDragonFly" },
+							{ "amount" : 6, "type" : "fireDragonFly" },
+							{ "amount" : 6, "type" : "fireDragonFly" },
+							{ "amount" : 6, "type" : "fireDragonFly" },
+							{ "amount" : 6, "type" : "fireDragonFly" }
+						],
+						"creatures" : [ { "amount" : 4, "type" : "wyvern" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 9, "type" : "fireDragonFly" },
+							{ "amount" : 9, "type" : "fireDragonFly" },
+							{ "amount" : 9, "type" : "fireDragonFly" },
+							{ "amount" : 9, "type" : "fireDragonFly" },
+							{ "amount" : 9, "type" : "fireDragonFly" }
+						],
+						"creatures" : [ { "amount" : 6, "type" : "wyvern" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 12, "type" : "fireDragonFly" },
+							{ "amount" : 12, "type" : "fireDragonFly" },
+							{ "amount" : 12, "type" : "fireDragonFly" },
+							{ "amount" : 12, "type" : "fireDragonFly" },
+							{ "amount" : 12, "type" : "fireDragonFly" }
+						],
+						"creatures" : [ { "amount" : 8, "type" : "wyvern" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 18, "type" : "fireDragonFly" },
+							{ "amount" : 18, "type" : "fireDragonFly" },
+							{ "amount" : 18, "type" : "fireDragonFly" },
+							{ "amount" : 18, "type" : "fireDragonFly" },
+							{ "amount" : 18, "type" : "fireDragonFly" }
+						],
+						"creatures" : [ { "amount" : 12, "type" : "wyvern" } ]
+					}
+				]
+			}
+		}
+	},
+	"shipwreck" : {
+		"index" :85,
+		"handler" : "configurable",
+		"base" : {
+			"sounds" : {
+				"visit" : ["ROGUE"]
+			}
+		},
+		"types" : {
+			"shipwreck" : {
+				"index" : 0,
+
+				"blockedVisitable" : true,
+				"coastVisitable" : true,
+				"name" : "Shipwreck",
+				"aiValue" : 2000,
+				"rmg" : {
+					"value"		: 2000,
+					"rarity"	: 100
+				},
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"onGuardedMessage" : 122,
+				"onVisited" : [
+					{
+						"message" : 123, // Such a despicable act reduces your army's morale.
+						"bonuses" : [ { "type" : "MORALE", "val" : -1, "duration" : "ONE_BATTLE", "stacking" : "shipwreckVisited", "description" : 99 } ]
+					}
+				],
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 2, "type" : "wight" },
+							{ "amount" : 2, "type" : "wight" },
+							{ "amount" : 2, "type" : "wight" },
+							{ "amount" : 2, "type" : "wight" },
+							{ "amount" : 2, "type" : "wight" }
+						],
+						"resources" :
+						{
+							"gold" : 2000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 3, "type" : "wight" },
+							{ "amount" : 3, "type" : "wight" },
+							{ "amount" : 3, "type" : "wight" },
+							{ "amount" : 3, "type" : "wight" },
+							{ "amount" : 3, "type" : "wight" }
+						],
+						"resources" :
+						{
+							"gold" : 3000
+						}
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 5, "type" : "wight" },
+							{ "amount" : 5, "type" : "wight" },
+							{ "amount" : 5, "type" : "wight" },
+							{ "amount" : 5, "type" : "wight" },
+							{ "amount" : 5, "type" : "wight" }
+						],
+						"resources" :
+						{
+							"gold" : 4000
+						},
+						"artifacts" : [ { "class" : "TREASURE" } ]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 10, "type" : "wight" }
+						],
+						"resources" :
+						{
+							"gold" : 5000
+						},
+						"artifacts" : [ { "class" : "MINOR" } ]
+					}
+				]
+			}
+		}
+	},
+	"derelictShip" : {
+		"index" :24,
+		"handler" : "configurable",
+		"base" : {
+			"sounds" : {
+				"visit" : ["ROGUE"]
+			}
+		},
+		"types" : {
+			"derelictShip" : {
+				"index" : 0,
+
+				"name" : "Derelict Ship",
+				"aiValue" : 4000,
+				"rmg" : {
+					"value"		: 4000,
+					"rarity"	: 20
+				},
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"onGuardedMessage" : 41,
+				"onVisited" : [
+					{
+						"message" : 42, // Such a despicable act reduces your army's morale.
+						"bonuses" : [ { "type" : "MORALE", "val" : -1, "duration" : "ONE_BATTLE", "stacking" : "derelictShipVisited", "description" : 101 } ]
+					}
+				],
+				"guardsLayout" : "creatureBankWide",
+				"rewards" : [
+					{
+						"message" : 43,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 4, "type" : "waterElemental" },
+							{ "amount" : 4, "type" : "waterElemental" },
+							{ "amount" : 4, "type" : "waterElemental" },
+							{ "amount" : 4, "type" : "waterElemental" },
+							{ "amount" : 4, "type" : "waterElemental" }
+						],
+						"resources" :
+						{
+							"gold" : 3000
+						}
+					},
+					{
+						"message" : 43,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 6, "type" : "waterElemental" },
+							{ "amount" : 6, "type" : "waterElemental" },
+							{ "amount" : 6, "type" : "waterElemental" },
+							{ "amount" : 6, "type" : "waterElemental" },
+							{ "amount" : 6, "type" : "waterElemental" }
+						],
+						"resources" : {
+							"gold" : 3000
+						},
+						"artifacts" : [ { "class" : "TREASURE" } ]
+					},
+					{
+						"message" : 43,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 8, "type" : "waterElemental" },
+							{ "amount" : 8, "type" : "waterElemental" },
+							{ "amount" : 8, "type" : "waterElemental" },
+							{ "amount" : 8, "type" : "waterElemental" },
+							{ "amount" : 8, "type" : "waterElemental" }
+						],
+						"resources" : {
+							"gold" : 4000
+						},
+						"artifacts" : [ { "class" : "TREASURE" } ]
+					},
+					{
+						"message" : 43,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 12, "type" : "waterElemental" },
+							{ "amount" : 12, "type" : "waterElemental" },
+							{ "amount" : 12, "type" : "waterElemental" },
+							{ "amount" : 12, "type" : "waterElemental" },
+							{ "amount" : 12, "type" : "waterElemental" }
+						],
+						"resources" : {
+							"gold" : 6000
+						},
+						"artifacts" : [ { "class" : "MINOR" } ]
+					}
+				]
+			}
+		}
+	},
+	"crypt" : {
+		"index" :84,
+		"handler" : "configurable",
+		"base" : {
+			"sounds" : {
+				"ambient" : ["LOOPDEAD"],
+				"visit" : ["GRAVEYARD"]
+			}
+		},
+		"types" : {
+			"crypt" : {
+				"index" : 0,
+				"name" : "Crypt",
+				"aiValue" : 1500,
+
+				"rmg" : {
+					"value"		: 1000,
+					"rarity"	: 100
+				},
+
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"onGuardedMessage" : 119, // Do you want to search the graves?
+				"onVisited" : [
+					{
+						"message" : 120, // Such a despicable act reduces your army's morale.
+						"bonuses" : [ { "type" : "MORALE", "val" : -1, "duration" : "ONE_BATTLE", "stacking" : "sepulcherVisited", "description" : 98 } ]
+					}
+				],
+				"guardsLayout" : "creatureBankNarrow",
+				"rewards" : [
+					{
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"mapDice" : 0,
+						"guards" : [
+							{ "amount" : 10, "type" : "skeleton" },
+							{ "amount" : 10, "type" : "walkingDead" },
+							{ "amount" : 10, "type" : "walkingDead" },
+							{ "amount" : 10, "type" : "skeleton" },
+							{ "amount" : 10, "type" : "skeleton" }
+						],
+						"message" : 121, // you search the graves and find something
+						"resources" :
+						{
+							"gold" : 1500
+						}
+					},
+					{
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"mapDice" : 1,
+						"guards" : [
+							{ "amount" : 13, "type" : "skeleton" },
+							{ "amount" : 10, "type" : "walkingDead" },
+							{ "amount" : 5, "type" : "wight" },
+							{ "amount" : 10, "type" : "walkingDead" },
+							{ "amount" : 12, "type" : "skeleton" }
+						],
+						"message" : 121, // you search the graves and find something
+						"resources" :
+						{
+							"gold" : 2000
+						}
+					},
+					{
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"mapDice" : 2,
+						"guards" : [
+							{ "amount" : 20, "type" : "skeleton" },
+							{ "amount" : 20, "type" : "walkingDead" },
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 5, "type" : "vampire" }
+						],
+						"message" : 121, // you search the graves and find something
+						"resources" :
+						{
+							"gold" : 2500
+						},
+						"artifacts" : [ { "class" : "TREASURE" } ]
+					},
+					{
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"mapDice" : 3,
+						"guards" : [
+							{ "amount" : 20, "type" : "skeleton" },
+							{ "amount" : 20, "type" : "walkingDead" },
+							{ "amount" : 10, "type" : "wight" },
+							{ "amount" : 10, "type" : "vampire" }
+						],
+						"message" : 121, // you search the graves and find something
+						"resources" :
+						{
+							"gold" : 5000
+						},
+						"artifacts" : [ { "class" : "TREASURE" } ]
+					}
+				]
+			}
+		}
+	},
+	"dragonUtopia" : {
+		"index" :25,
+		"handler" : "configurable",
+		"base" : {
+			"sounds" : {
+				"ambient" : ["LOOPDRAG"],
+				"visit" : ["DRAGON"]
+			}
+		},
+		"types" : {
+			"dragonUtopia" : {
+				"index" : 0,
+
+				"name" : "Dragon Utopia",
+				"aiValue" : 11000,
+				"rmg" : {
+					"value"		: 10000,
+					"rarity"	: 100
+				},
+
+				"visitMode" : "once",
+				"selectMode" : "selectFirst",
+				"onGuardedMessage" : 47,
+				"onVisitedMessage" : 33,
+				"guardsLayout" : "creatureBankWide",
+				"rewards" : [
+					{
+						"message" : 34,
+						"mapDice" : 0,
+						"appearChance" : { "min" : 0, "max" : 30 },
+						"guards" : [
+							{ "amount" : 8, "type" : "greenDragon" },
+							{ "amount" : 5, "type" : "redDragon" },
+							{ "amount" : 2, "type" : "goldDragon" },
+							{ "amount" : 1, "type" : "blackDragon" }
+						],
+						"resources" :
+						{
+							"gold" : 20000
+						},
+						"artifacts" : [
+							{ "class" : "TREASURE" },
+							{ "class" : "MINOR" },
+							{ "class" : "MAJOR" },
+							{ "class" : "RELIC" }
+						]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 1,
+						"appearChance" : { "min" : 30, "max" : 60 },
+						"guards" : [
+							{ "amount" : 8, "type" : "greenDragon" },
+							{ "amount" : 6, "type" : "redDragon" },
+							{ "amount" : 3, "type" : "goldDragon" },
+							{ "amount" : 2, "type" : "blackDragon" }
+						],
+						"resources" :
+						{
+							"gold" : 30000
+						},
+						"artifacts" : [
+							{ "class" : "MINOR" },
+							{ "class" : "MAJOR" },
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" }
+						]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 2,
+						"appearChance" : { "min" : 60, "max" : 90 },
+						"guards" : [
+							{ "amount" : 8, "type" : "greenDragon" },
+							{ "amount" : 6, "type" : "redDragon" },
+							{ "amount" : 4, "type" : "goldDragon" },
+							{ "amount" : 3, "type" : "blackDragon" }
+						],
+						"resources" :
+						{
+							"gold" : 40000
+						},
+						"artifacts" : [
+							{ "class" : "MAJOR" },
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" }
+						]
+					},
+					{
+						"message" : 34,
+						"mapDice" : 3,
+						"appearChance" : { "min" : 90, "max" : 100 },
+						"guards" : [
+							{ "amount" : 8, "type" : "greenDragon" },
+							{ "amount" : 7, "type" : "redDragon" },
+							{ "amount" : 6, "type" : "goldDragon" },
+							{ "amount" : 5, "type" : "blackDragon" }
+						],
+						"resources" :
+						{
+							"gold" : 50000
+						},
+						"artifacts" : [
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" },
+							{ "class" : "RELIC" }
+						]
+					}
+				]
+			}
+		}
+	}
+}

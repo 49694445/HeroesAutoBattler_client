@@ -1,0 +1,13 @@
+diff --git a/recipes/onnxruntime/all/conanfile.py b/recipes/onnxruntime/all/conanfile.py
+index 0757ecdc0..bb8cca8bf 100644
+--- a/recipes/onnxruntime/all/conanfile.py
++++ b/recipes/onnxruntime/all/conanfile.py
+@@ -47,7 +52,7 @@ class OnnxRuntimeConan(ConanFile):
+     def _compilers_minimum_version(self):
+         return {
+             "Visual Studio": "17",
+-            "msvc": "193",
++            "msvc": "192",
+             "gcc": "9",
+             "clang": "5",
+             "apple-clang": "10",

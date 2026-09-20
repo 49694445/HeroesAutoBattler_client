@@ -1,0 +1,42 @@
+{
+	// Original HoMM 3 bitmap fonts
+	// Stored in H3Bitmap.lod with fnt extension
+	// Warning: Do not change number of entries in this list
+	"bitmap" :
+	[
+		"BIGFONT",  // Mostly used for window titles
+		"CALLI10R", // Only in World View menu
+		"CREDITS",  // Only in Credits menu
+		"HISCORE",  // Only in High Scores menu
+		"MEDFONT",  // Some titles
+		"SMALFONT", // Most of the messages
+		"TIMES08R", // Unused in VCMI
+		"TINY",     // Some text
+		"VERD10B"   // Unused in VCMI
+	],
+	
+	// True type replacements
+	// Should be in format:
+	// <replaced bitmap font name, case-sensetive> : <true type font description>
+	// "file" - file to load font from, must be in data/ directory
+	// "size" - point size of font. Can be defined in two forms:
+	// a) single number, e.g. 10. In this case, game will automatically multiply font size by upscaling factor when xBRZ is in use, 
+	//    so xbrz 2x will use 20px, xbrz 3x will use 30px, etc
+	// b) list of scaling factors for each scaling mode, e.g. [ 10, 16, 22, 26]. In this case game will select point size according to xBRZ scaling factor
+	//    so unscaled mode will use 10px, xbrz2 will use 16px, and xbrz3 will use 22
+	// "style" - italic and\or bold, indicates font style
+	// "outline" - if set, black shadow will be generated around entire text (instead of only bottom-right side)
+	// "noShadow" - if set, this font will not drop any shadow
+	"trueType":
+	{
+		"BIGFONT"  : { "file" : "NotoSerif-Bold.ttf",   "size" : [ 18, 38, 57, 76] },
+		"CALLI10R" : { "file" : "NotoSerif-Bold.ttf",   "size" : [ 12, 24, 36, 48] }, // TODO: find better matching font? This is likely non-free 'Callisto MT' font
+		"CREDITS"  : { "file" : "NotoSerif-Black.ttf",  "size" : [ 22, 44, 66, 88], "outline" : true },
+		"HISCORE"  : { "file" : "NotoSerif-Black.ttf",  "size" : [ 18, 36, 54, 72], "outline" : true },
+		"MEDFONT"  : { "file" : "NotoSerif-Bold.ttf",   "size" : [ 13, 26, 39, 52] },
+		"SMALFONT" : { "file" : "NotoSerif-Medium.ttf", "size" : [ 11, 22, 33, 44] },
+		"TIMES08R" : { "file" : "NotoSerif-Medium.ttf", "size" : [  8, 16, 24, 32] },
+		"TINY"     : { "file" : "NotoSans-Medium.ttf",  "size" : [  9, 18, 28, 38], "noShadow" : true }, // The only H3 font without shadow
+		"VERD10B"  : { "file" : "NotoSans-Medium.ttf",  "size" : [ 13, 26, 39, 52] }
+	}
+}

@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='utf-8'?>
+<component type="desktop">
+	<id>eu.vcmi.VCMI</id>
+	<name>VCMI</name>
+	<summary>Open-source game engine for Heroes of Might and Magic III</summary>
+	<developer id="eu.vcmi">
+		<name>VCMI Team</name>
+	</developer>
+	<metadata_license>CC-BY-SA-4.0</metadata_license>
+	<project_license>GPL-2.0-or-later</project_license>
+	<description>
+		<p>VCMI is an open-source engine for Heroes of Might and Magic III with new possibilities. Years of intensive work resulted in an impressive amount of features. Among the current features are:</p>
+		<ul>
+			<li>Complete gameplay mechanics</li>
+			<li>Almost all objects, abilities, spells and other content</li>
+			<li>Basic battle AI and adventure AI</li>
+			<li>Many GUI improvements: high resolutions, stack queue, creature window</li>
+			<li>Advanced and easy mod support - add new towns, creatures, heroes, artifacts and spells without limits or conflicts</li>
+			<li>Launcher for easy configuration - download mods from our server and install them immediately!</li>
+			<li>Random map generator that supports objects added by mods</li>
+		</ul>
+		<p>Note: In order to play the game using VCMI you need to own data files for Heroes of Might and Magic III: The Shadow of Death.</p>
+		<p>If you want help, please check our forum, bug tracker or GitHub page.</p>
+	</description>
+	<screenshots>
+		<screenshot type="default">
+			<image type="source">https://play-lh.googleusercontent.com/-ZErg8hUyc3TScVQZYh30KzaUDWmnIGRcN3WPCQimdviOJVoMkjDdIW19WqX0KZO7mk=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/8Uuuir7_0pDCPohacS7nd6CQuvaOO7nKmKWo-A-EysRY8uIK5qLsv0cpMxT3AFu2DA=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/993tSmsQh1qgb1_XQUxD1wmS8Zuiydf0LsQK_nU2fAiJl62n0_Vl_5JMVK-J9lvVeQ=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/N3fn4cqX2iN0t9jzEo0vgEMBpUYWyRgOz8AtDsMLmF-BTyxO4l2uoAderEIhXPvPsg=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/9wSQsPlMPSBAzekEcw1OVpzeOvYiHrYRYHgpa1aRk31pvR752gu_cUZws5x8JMCACw=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/nU_MSwmEhiQ14Sx9xI3QFF1FhL7BYTDMbEYQg-XglSYwIMpYZDpP92_ybTtu4cVJSxo=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/rhI5moPCKQpYdjnRaJJ_CdIxSAXUkrH7ddghuPWaW0vcyaltd-ZGZG4Kl6v3YKGVlzU=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/1zecL5SvayVkNoIHijeS_rm0Yr_XyHbp_dmSx70NXhjckvnezwvWkpINYBHAy4o8EaM=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/e5ibvuWm442dYN2z_pAwDC3Ktc7XOY6FEI4N7BkFB7DqGi3Q-Vl46KqoJ_EFSrXRNw=w2560-h1440</image>
+		</screenshot>
+		<screenshot>
+			<image type="source">https://play-lh.googleusercontent.com/wD6xJK2nuzVyKUFODfQs2SEbUuSyEglojpp_FE6GeAuzdA_R44Dp6gTyN70KCwpRtD9M=w2560-h1440</image>
+		</screenshot>
+	</screenshots>
+	<launchable type="desktop-id">vcmilauncher.desktop</launchable>
+	<releases>
+	    <release version="1.7.4" date="2026-05-17" type="stable"/>
+	    <release version="1.7.3" date="2026-02-27" type="stable"/>
+	    <release version="1.7.2" date="2026-02-13" type="stable"/>
+		<release version="1.7.1" date="2025-12-31" type="stable"/>
+		<release version="1.7.0" date="2025-12-25" type="stable"/>
+		<release version="1.6.8" date="2025-04-25" type="stable"/>
+		<release version="1.6.7" date="2025-02-28" type="stable"/>
+		<release version="1.6.6" date="2025-02-21" type="stable"/>
+		<release version="1.6.5" date="2025-02-03" type="stable"/>
+		<release version="1.6.4" date="2025-01-31" type="stable"/>
+		<release version="1.6.3" date="2025-01-10" type="stable"/>
+		<release version="1.6.2" date="2025-01-03" type="stable"/>
+		<release version="1.6.1" date="2024-12-27" type="stable"/>
+		<release version="1.6.0" date="2024-12-20" type="stable"/>
+		<release version="1.5.7" date="2024-08-26" type="stable"/>
+		<release version="1.5.6" date="2024-08-04" type="stable"/>
+		<release version="1.5.5" date="2024-07-17" type="stable"/>
+		<release version="1.5.4" date="2024-07-12" type="stable"/>
+		<release version="1.5.3" date="2024-06-21" type="stable"/>
+		<release version="1.5.2" date="2024-05-31" type="stable"/>
+		<release version="1.5.1" date="2024-05-17" type="stable"/>
+		<release version="1.5.0" date="2024-05-10" type="stable"/>
+		<release version="1.4.5" date="2024-01-23" type="stable"/>
+		<release version="1.4.4" date="2024-01-20" type="stable"/>
+		<release version="1.4.3" date="2024-01-19" type="stable"/>
+		<release version="1.4.2" date="2023-12-25" type="stable"/>
+		<release version="1.4.1" date="2023-12-12" type="stable"/>
+		<release version="1.4.0" date="2023-12-08" type="stable"/>
+		<release version="1.3.2" date="2023-09-15" type="stable"/>
+		<release version="1.3.1" date="2023-08-18" type="stable"/>
+		<release version="1.3.0" date="2023-08-04" type="stable"/>
+		<release version="1.2.1" date="2023-04-28" type="stable"/>
+		<release version="1.2.0" date="2023-04-14" type="stable"/>
+		<release version="1.1.1" date="2023-02-03" type="stable"/>
+		<release version="1.1.0" date="2022-12-23" type="stable"/>
+		<release version="1.0.0" date="2022-09-11" type="stable"/>
+		<release version="0.99" date="2016-11-01" type="stable"/>
+	</releases>
+	<url type="homepage">https://vcmi.eu/</url>
+	<url type="bugtracker">https://github.com/vcmi/vcmi/issues</url>
+	<url type="faq">https://vcmi.eu/faq/</url>
+	<url type="help">https://github.com/vcmi/vcmi/blob/master/docs/Readme.md</url>
+	<url type="translate">https://github.com/vcmi/vcmi/blob/master/docs/translators/Translations.md</url>
+	<url type="contact">https://discord.gg/chBT42V</url>
+	<url type="vcs-browser">https://github.com/vcmi/vcmi</url>
+	<categories>
+		<category>Game</category>
+		<category>StrategyGame</category>
+	</categories>
+	<recommends>
+		<control>pointing</control>
+		<control>keyboard</control>
+		<control>touch</control>
+		<control>gamepad</control>
+	</recommends>
+	<content_rating type="oars-1.1">
+		<content_attribute id="violence-cartoon">moderate</content_attribute>
+		<content_attribute id="violence-fantasy">moderate</content_attribute>
+		<content_attribute id="violence-bloodshed">moderate</content_attribute>
+		<content_attribute id="social-chat">intense</content_attribute>
+	</content_rating>
+	<provides>
+		<binary>vcmibuilder</binary>
+		<binary>vcmiclient</binary>
+		<binary>vcmieditor</binary>
+		<binary>vcmilauncher</binary>
+		<binary>vcmiserver</binary>
+	</provides>
+	<keywords>
+		<keyword>heroes3</keyword>
+		<keyword>homm3</keyword>
+	</keywords>
+</component>

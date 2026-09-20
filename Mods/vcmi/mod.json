@@ -1,0 +1,281 @@
+{
+	"name" : "VCMI essential files",
+	"description" : "Essential files required for VCMI to run correctly",
+	"version" : "1.5",
+	"author" : "VCMI Team",
+	"contact" : "http://forum.vcmi.eu/index.php",
+	"modType" : "Graphical",
+
+	"factions" : [ "config/towerFactions" ],
+	"creatures" : [ "config/towerCreature" ],
+	"spells" : [ "config/spells" ],
+
+	"belarusian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/belarusian.json"
+		]
+	},
+
+	"bulgarian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/bulgarian.json"
+		]
+	},
+
+	"czech" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/czech.json"
+		]
+	},
+
+	"chinese" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/chinese.json"
+		]
+	},
+
+	"dutch" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/dutch.json"
+		]
+	},
+
+	"filipino" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/filipino.json"
+		]
+	},
+
+	"finnish" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/finnish.json"
+		]
+	},
+
+	"french" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/french.json"
+		]
+	},
+
+	"german" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/german.json"
+		]
+	},
+
+	"greek" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/greek.json"
+		]
+	},
+
+	"hungarian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/hungarian.json"
+		]
+	},
+
+	"italian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/italian.json"
+		]
+	},
+
+	"japanese" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/japanese.json"
+		]
+	},
+
+	"korean" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/korean.json"
+		]
+	},
+
+	"latvian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/latvian.json"
+		]
+	},
+
+	"norwegian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/norwegian.json"
+		]
+	},
+
+	"polish" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/polish.json"
+		]
+	},
+
+	"portuguese" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/portuguese.json"
+		]
+	},
+
+	"romanian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/romanian.json"
+		]
+	},
+
+	"russian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/russian.json"
+		]
+	},
+
+	"serbian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/serbian.json"
+		]
+	},
+
+	"spanish" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/spanish.json"
+		]
+	},
+
+	"swedish" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/swedish.json"
+		]
+	},
+
+	"ukrainian" : {
+		"skipValidation" : true,
+		"translations" : [
+			"config/translations/ukrainian.json"
+		]
+	},
+
+	"vietnamese": {
+		"skipValidation": true,
+		"translations": [
+			"config/translations/vietnamese.json"
+		]
+	},
+
+	"turkish": {
+		"skipValidation": true,
+		"translations": [
+			"config/translations/turkish.json"
+		]
+	},
+
+	"translations" : [
+		"config/translations/english.json"
+	],
+
+	"templates" : [
+		"config/rmg/hdmod/aroundamarsh.JSON",
+		"config/rmg/hdmod/balance.JSON",
+		"config/rmg/hdmod/blockbuster.JSON",
+		"config/rmg/hdmod/clashOfDragons.json",
+		"config/rmg/hdmod/coldshadowsFantasy.json",
+		"config/rmg/hdmod/cube.JSON",
+		"config/rmg/hdmod/diamond.JSON",
+		"config/rmg/hdmod/extreme.JSON",
+		"config/rmg/hdmod/extreme2.JSON",
+		"config/rmg/hdmod/fear.JSON",
+		"config/rmg/hdmod/frozenDragons.JSON",
+		"config/rmg/hdmod/gimlisRevenge.JSON",
+		"config/rmg/hdmod/guerilla.JSON",
+		"config/rmg/hdmod/headquarters.JSON",
+		"config/rmg/hdmod/hypercube.JSON",
+		"config/rmg/hdmod/jebusCross.json",
+		"config/rmg/hdmod/longRun.JSON",
+		"config/rmg/hdmod/marathon.JSON",
+		"config/rmg/hdmod/miniNostalgia.JSON",
+		"config/rmg/hdmod/nostalgia.JSON",
+		"config/rmg/hdmod/oceansEleven.JSON",
+		"config/rmg/hdmod/panic.JSON",
+		"config/rmg/hdmod/poorJebus.JSON",
+		"config/rmg/hdmod/reckless.JSON",
+		"config/rmg/hdmod/roadrunner.JSON",
+		"config/rmg/hdmod/shaaafworld.JSON",
+		"config/rmg/hdmod/skirmish.JSON",
+		"config/rmg/hdmod/speed1.JSON",
+		"config/rmg/hdmod/speed2.JSON",
+		"config/rmg/hdmod/spider.JSON",
+		"config/rmg/hdmod/superslam.JSON",
+		"config/rmg/hdmod/triad.JSON",
+		"config/rmg/hdmod/vortex.JSON",
+		"config/rmg/heroes3/dwarvenTunnels.JSON",
+		"config/rmg/heroes3/golemsAplenty.JSON",
+		"config/rmg/heroes3/meetingInMuzgob.JSON",
+		"config/rmg/heroes3/monksRetreat.JSON",
+		"config/rmg/heroes3/newcomers.JSON",
+		"config/rmg/heroes3/readyOrNot.JSON",
+		"config/rmg/heroes3/smallRing.JSON",
+		"config/rmg/heroes3/southOfHell.JSON",
+		"config/rmg/heroes3/worldsAtWar.JSON",
+		"config/rmg/symmetric/2sm0k.JSON",
+		"config/rmg/symmetric/2sm2a.JSON",
+		"config/rmg/symmetric/2sm2b.JSON",
+		"config/rmg/symmetric/2sm2b(2).JSON",
+		"config/rmg/symmetric/2sm2c.JSON",
+		"config/rmg/symmetric/2sm2f.JSON",
+		"config/rmg/symmetric/2sm2f(2).JSON",
+		"config/rmg/symmetric/2sm2h.JSON",
+		"config/rmg/symmetric/2sm2h(2).JSON",
+		"config/rmg/symmetric/2sm2i.JSON",
+		"config/rmg/symmetric/2sm2i(2).JSON",
+		"config/rmg/symmetric/2sm4d.JSON",
+		"config/rmg/symmetric/2sm4d(2).JSON",
+		"config/rmg/symmetric/2sm4d(3).JSON",
+		"config/rmg/symmetric/3sb0b.JSON",
+		"config/rmg/symmetric/3sb0c.JSON",
+		"config/rmg/symmetric/3sm3d.JSON",
+		"config/rmg/symmetric/4sm0d.JSON",
+		"config/rmg/symmetric/4sm0f.JSON",
+		"config/rmg/symmetric/4sm0g.JSON",
+		"config/rmg/symmetric/4sm4e.JSON",
+		"config/rmg/symmetric/5sb0a.JSON",
+		"config/rmg/symmetric/5sb0b.JSON",
+		"config/rmg/symmetric/6lm10.JSON",
+		"config/rmg/symmetric/6lm10a.JSON",
+		"config/rmg/symmetric/6sm0b.JSON",
+		"config/rmg/symmetric/6sm0d.JSON",
+		"config/rmg/symmetric/6sm0e.JSON",
+		"config/rmg/symmetric/7sb0b.JSON",
+		"config/rmg/symmetric/7sb0c.JSON",
+		"config/rmg/symmetric/8mm0e.JSON",
+		"config/rmg/symmetric/8mm6.JSON",
+		"config/rmg/symmetric/8mm6a.JSON",
+		"config/rmg/symmetric/8sm0c.JSON",
+		"config/rmg/symmetric/8sm0f.JSON",
+		"config/rmg/symmetric/8xm12.JSON",
+		"config/rmg/symmetric/8xm12a.JSON",
+		"config/rmg/symmetric/8xm8.JSON"
+	]
+}

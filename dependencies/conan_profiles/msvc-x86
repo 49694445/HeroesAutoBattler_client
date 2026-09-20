@@ -1,0 +1,8 @@
+include(base/msvc-intel)
+
+[settings]
+arch=x86
+
+[options]
+# Linking never finishes with asm enabled
+ffmpeg/*:with_asm=False

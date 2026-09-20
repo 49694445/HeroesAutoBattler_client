@@ -1,0 +1,137 @@
+{
+	"core:caitlin": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:gelare": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:grindan": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:damacon": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:octavia": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:clavius": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:nagash": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:jenova": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:aine": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"hota.cove:06leena": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 700
+				}
+			}
+		}
+	},
+	"core:rissa": {
+		"specialty": {
+			"bonuses": {
+				"mercury": {
+					"val": 3
+				}
+			}
+		}
+	},
+	"core:calid": {
+		"specialty": {
+			"bonuses": {
+				"sulfur": {
+					"val": 3
+				}
+			}
+		}
+	},
+	"core:sephinroth": {
+		"specialty": {
+			"bonuses": {
+				"crystal": {
+					"val": 3
+				}
+			}
+		}
+	},
+	"core:saurug": {
+		"specialty": {
+			"bonuses": {
+				"gems": {
+					"val": 3
+				}
+			}
+		}
+	},
+	"hota.cove:15andal": {
+		"specialty": {
+			"bonuses": {
+				"gold": {
+					"val": 3
+				}
+			}
+		}
+	}
+}

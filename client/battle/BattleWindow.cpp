@@ -1,0 +1,1031 @@
+/*
+ * BattleWindow.cpp, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+#include "StdInc.h"
+#include "BattleWindow.h"
+
+#include "BattleActionsController.h"
+#include "BattleConsole.h"
+#include "BattleFieldController.h"
+#include "BattleInterface.h"
+#include "BattleStacksController.h"
+#include "HeroInfoWindow.h"
+#include "../windows/CHeroWindow.h"
+#include "QuickSpellPanel.h"
+#include "StackInfoBasicPanel.h"
+#include "StackQueue.h"
+#include "UnitActionPanel.h"
+
+#include "../CPlayerInterface.h"
+#include "../CServerHandler.h"
+#include "../Client.h"
+#include "../GameEngine.h"
+#include "../GameInstance.h"
+#include "../adventureMap/CInGameConsole.h"
+#include "../adventureMap/TurnTimerWidget.h"
+#include "../gui/CursorHandler.h"
+#include "../gui/Shortcut.h"
+#include "../gui/WindowHandler.h"
+#include "../render/CAnimation.h"
+#include "../render/Canvas.h"
+#include "../render/IRenderHandler.h"
+#include "../widgets/Buttons.h"
+#include "../widgets/Images.h"
+#include "../windows/CCreatureWindow.h"
+#include "../windows/CMessage.h"
+#include "../windows/CSpellWindow.h"
+#include "../windows/settings/SettingsMainWindow.h"
+
+#include "../../lib/CConfigHandler.h"
+#include "../../lib/CPlayerState.h"
+#include "../../lib/CStack.h"
+#include "../../lib/GameLibrary.h"
+#include "../../lib/StartInfo.h"
+#include "../../lib/battle/BattleInfo.h"
+#include "../../lib/battle/CPlayerBattleCallback.h"
+#include "../../lib/callback/CCallback.h"
+#include "../../lib/callback/CDynLibHandler.h"
+#include "../../lib/entities/artifact/CArtHandler.h"
+#include "../../lib/filesystem/ResourcePath.h"
+#include "../../lib/gameState/InfoAboutArmy.h"
+#include "../../lib/mapping/CMapHeader.h"
+#include "../../lib/mapObjects/CGHeroInstance.h"
+#include "../../lib/texts/CGeneralTextHandler.h"
+
+BattleWindow::BattleWindow(BattleInterface & Owner)
+	: owner(Owner)
+{
+	OBJECT_CONSTRUCTION;
+	pos.w = 800;
+	pos.h = 600;
+	pos = center();
+
+	PlayerColor defenderColor = owner.getBattle()->getBattle()->getSidePlayer(BattleSide::DEFENDER);
+	PlayerColor attackerColor = owner.getBattle()->getBattle()->getSidePlayer(BattleSide::ATTACKER);
+	bool isDefenderHuman = defenderColor.isValidPlayer() && GAME->interface()->cb->getStartInfo()->playerInfos.at(defenderColor).isControlledByHuman();
+	bool isAttackerHuman = attackerColor.isValidPlayer() && GAME->interface()->cb->getStartInfo()->playerInfos.at(attackerColor).isControlledByHuman();
+	onlyOnePlayerHuman = isDefenderHuman != isAttackerHuman;
+	const bool isArenaBattle = owner.curInt->cb->getMapHeader()->battleOnly;
+
+	REGISTER_BUILDER("battleConsole", &BattleWindow::buildBattleConsole);
+	
+	JsonNode config(JsonPath::builtin("config/widgets/BattleWindow2.json"));
+	if (isArenaBattle)
+	{
+		// Do not create these controls at all. Removing an already-created
+		// configurable widget is insufficient because its input binding retains it.
+		auto & items = config["items"].Vector();
+		items.erase(std::remove_if(items.begin(), items.end(), [](const JsonNode & item)
+		{
+			const auto & name = item["name"].String();
+			return name == "surrender" || name == "flee";
+		}), items.end());
+	}
+	
+	addShortcut(EShortcut::BATTLE_TOGGLE_QUICKSPELL, [this](){ this->toggleStickyQuickSpellVisibility();});
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_0,  [this](){ useSpellIfPossible(0);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_1,  [this](){ useSpellIfPossible(1);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_2,  [this](){ useSpellIfPossible(2);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_3,  [this](){ useSpellIfPossible(3);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_4,  [this](){ useSpellIfPossible(4);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_5,  [this](){ useSpellIfPossible(5);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_6,  [this](){ useSpellIfPossible(6);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_7,  [this](){ useSpellIfPossible(7);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_8,  [this](){ useSpellIfPossible(8);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_9,  [this](){ useSpellIfPossible(9);  });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_10, [this](){ useSpellIfPossible(10); });
+	addShortcut(EShortcut::BATTLE_SPELL_SHORTCUT_11, [this](){ useSpellIfPossible(11); });
+
+	addShortcut(EShortcut::GLOBAL_OPTIONS, std::bind(&BattleWindow::bOptionsf, this));
+	if (!isArenaBattle)
+	{
+		addShortcut(EShortcut::BATTLE_SURRENDER, std::bind(&BattleWindow::bSurrenderf, this));
+		addShortcut(EShortcut::BATTLE_RETREAT, std::bind(&BattleWindow::bFleef, this));
+		addShortcut(EShortcut::BATTLE_END_WITH_AUTOCOMBAT, std::bind(&BattleWindow::endWithAutocombat, this));
+	}
+	addShortcut(EShortcut::BATTLE_AUTOCOMBAT, std::bind(&BattleWindow::bAutofightf, this));
+	addShortcut(EShortcut::BATTLE_CAST_SPELL, std::bind(&BattleWindow::bSpellf, this));
+	addShortcut(EShortcut::BATTLE_WAIT, std::bind(&BattleWindow::bWaitf, this));
+	addShortcut(EShortcut::BATTLE_DEFEND, std::bind(&BattleWindow::bDefencef, this));
+	addShortcut(EShortcut::BATTLE_CONSOLE_UP, std::bind(&BattleWindow::bConsoleUpf, this));
+	addShortcut(EShortcut::BATTLE_CONSOLE_DOWN, std::bind(&BattleWindow::bConsoleDownf, this));
+	addShortcut(EShortcut::BATTLE_TACTICS_NEXT, std::bind(&BattleWindow::bTacticNextStack, this));
+	addShortcut(EShortcut::BATTLE_TACTICS_END, std::bind(&BattleWindow::bTacticPhaseEnd, this));
+	addShortcut(EShortcut::BATTLE_OPEN_ACTIVE_UNIT, std::bind(&BattleWindow::bOpenActiveUnit, this));
+	addShortcut(EShortcut::BATTLE_OPEN_HOVERED_UNIT, std::bind(&BattleWindow::bOpenHoveredUnit, this));
+
+	addShortcut(EShortcut::BATTLE_TOGGLE_QUEUE, [this](){ this->toggleQueueVisibility();});
+	addShortcut(EShortcut::BATTLE_TOGGLE_HEROES_STATS, [this](){ this->toggleStickyHeroWindowsVisibility();});
+	addShortcut(EShortcut::BATTLE_USE_CREATURE_SPELL, [this](){ this->owner.actionsController->enterCreatureCastingMode(); });
+	addShortcut(EShortcut::GLOBAL_CANCEL, [this](){ this->owner.actionsController->endCastingSpell(); });
+	addShortcut(EShortcut::ADVENTURE_QUICK_LOAD, [this](){
+		//allow quick load only on player turn while no animations are ongoing
+		if (!this->owner.hasAnimations() && this->owner.stacksController->getActiveStack())
+			GAME->interface()->proposeQuickLoadingGame(); });
+
+	build(config);
+	
+	console = widget<BattleConsole>("console");
+
+	owner.console = console;
+
+	owner.fieldController.reset( new BattleFieldController(owner));
+	owner.fieldController->createHeroes();
+
+	createQueue();
+	createQuickSpellWindow();
+	createStickyHeroInfoWindows();
+	createTimerInfoWindows();
+
+	if ( owner.tacticsMode )
+		tacticPhaseStarted();
+	else
+		tacticPhaseEnded();
+
+	addUsedEvents(LCLICK | KEYBOARD);
+}
+
+void BattleWindow::createQueue()
+{
+	OBJECT_CONSTRUCTION;
+
+	//create stack queue and adjust our own position
+	bool embedQueue;
+	bool showQueue = settings["battle"]["showQueue"].Bool();
+	std::string queueSize = settings["battle"]["queueSize"].String();
+
+	if(queueSize == "auto")
+		embedQueue = ENGINE->screenDimensions().y < 700;
+	else
+		embedQueue = ENGINE->screenDimensions().y < 700 || queueSize == "small";
+
+	queue = std::make_shared<StackQueue>(embedQueue, owner);
+	if(!embedQueue && showQueue)
+	{
+		//re-center, taking into account stack queue position
+		pos.y -= queue->pos.h;
+		pos.h += queue->pos.h;
+	}
+	if(showQueue)
+		pos = center();
+
+	if (!showQueue)
+		queue->disable();
+}
+
+void BattleWindow::createStickyHeroInfoWindows()
+{
+	OBJECT_CONSTRUCTION;
+
+	if(owner.defendingHeroInstance)
+	{
+		InfoAboutHero info;
+		info.initFromHero(owner.defendingHeroInstance, InfoAboutHero::EInfoLevel::INBATTLE);
+		defenderHeroWindow = std::make_shared<HeroInfoBasicPanel>(info, nullptr, true, [this]()
+		{
+			owner.showEnemyHeroWindow(owner.defendingHeroInstance);
+		});
+	}
+	if(owner.attackingHeroInstance)
+	{
+		InfoAboutHero info;
+		info.initFromHero(owner.attackingHeroInstance, InfoAboutHero::EInfoLevel::INBATTLE);
+		attackerHeroWindow = std::make_shared<HeroInfoBasicPanel>(info, nullptr, true, [this]()
+		{
+			owner.showEnemyHeroWindow(owner.attackingHeroInstance);
+		});
+	}
+
+	bool showInfoWindows = settings["battle"]["stickyHeroInfoWindows"].Bool();
+
+	if(!showInfoWindows)
+	{
+		if(attackerHeroWindow)
+			attackerHeroWindow->disable();
+
+		if(defenderHeroWindow)
+			defenderHeroWindow->disable();
+	}
+
+	setPositionInfoWindow();
+}
+
+void BattleWindow::createQuickSpellWindow()
+{
+	OBJECT_CONSTRUCTION;
+
+	quickSpellWindow = std::make_shared<QuickSpellPanel>(owner);
+	quickSpellWindow->moveTo(Point(pos.x - 52, pos.y));
+
+	unitActionWindow = std::make_shared<UnitActionPanel>(owner);
+	unitActionWindow->moveTo(Point(pos.x + pos.w, pos.y));
+
+	if(settings["battle"]["enableQuickSpellPanel"].Bool())
+		showStickyQuickSpellWindow();
+	else
+		hideStickyQuickSpellWindow();
+}
+
+void BattleWindow::toggleStickyQuickSpellVisibility()
+{
+	if(settings["battle"]["enableQuickSpellPanel"].Bool())
+		hideStickyQuickSpellWindow();
+	else
+		showStickyQuickSpellWindow();
+}
+
+void BattleWindow::hideStickyQuickSpellWindow()
+{
+	Settings showStickyQuickSpellWindow = settings.write["battle"]["enableQuickSpellPanel"];
+	showStickyQuickSpellWindow->Bool() = false;
+
+	quickSpellWindow->disable();
+	unitActionWindow->disable();
+
+	createTimerInfoWindows();
+	setPositionInfoWindow();
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::showStickyQuickSpellWindow()
+{
+	Settings showStickyQuickSpellWindow = settings.write["battle"]["enableQuickSpellPanel"];
+	showStickyQuickSpellWindow->Bool() = true;
+
+	auto hero = owner.getBattle()->battleGetMyHero();
+
+	bool quickSpellWindowVisible = hasSpaceForQuickActions() && hero != nullptr && hero->hasSpellbook();
+	bool unitActionWindowVisible = hasSpaceForQuickActions();
+
+	quickSpellWindow->setEnabled(quickSpellWindowVisible);
+	unitActionWindow->setEnabled(unitActionWindowVisible);
+
+	if(owner.actionsController && unitActionWindowVisible) // needed after resize of window
+		owner.actionsController->activateStack();
+
+	createTimerInfoWindows();
+	setPositionInfoWindow();
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::createTimerInfoWindows()
+{
+	OBJECT_CONSTRUCTION;
+
+	int xOffsetAttacker = quickSpellWindow->isDisabled() ? 0 : -51;
+	int xOffsetDefender = unitActionWindow->isDisabled() ? 0 : 51;
+
+	if(GAME->interface()->cb->getStartInfo()->turnTimerInfo.battleTimer != 0 || GAME->interface()->cb->getStartInfo()->turnTimerInfo.unitTimer != 0)
+	{
+		PlayerColor attacker = owner.getBattle()->sideToPlayer(BattleSide::ATTACKER);
+		PlayerColor defender = owner.getBattle()->sideToPlayer(BattleSide::DEFENDER);
+
+		if (attacker.isValidPlayer())
+		{
+			if (placeInfoWindowsOutside())
+				attackerTimerWidget = std::make_shared<TurnTimerWidget>(Point(-76 + xOffsetAttacker, 0), attacker);
+			else
+				attackerTimerWidget = std::make_shared<TurnTimerWidget>(Point(1, 135), attacker);
+		}
+
+		if (defender.isValidPlayer())
+		{
+			if (placeInfoWindowsOutside())
+				defenderTimerWidget = std::make_shared<TurnTimerWidget>(Point(pos.w + xOffsetDefender, 0), defender);
+			else
+				defenderTimerWidget = std::make_shared<TurnTimerWidget>(Point(pos.w - 78, 135), defender);
+		}
+	}
+}
+
+std::shared_ptr<BattleConsole> BattleWindow::buildBattleConsole(const JsonNode & config) const
+{
+	auto rect = readRect(config["rect"]);
+	auto offset = readPosition(config["imagePosition"]);
+	auto background = widget<CPicture>("menuBattle");
+	return std::make_shared<BattleConsole>(owner, background, rect.topLeft(), offset, rect.dimensions() );
+}
+
+void BattleWindow::useSpellIfPossible(int slot)
+{
+	SpellID id;
+	bool fromSettings;
+	std::tie(id, fromSettings) = quickSpellWindow->getSpells()[slot];
+
+	if(id == SpellID::NONE)
+		return;
+
+	if(id.hasValue() && owner.getBattle()->battleGetMyHero() && id.toSpell()->canBeCast(owner.getBattle().get(), spells::Mode::HERO, owner.getBattle()->battleGetMyHero()))
+	{
+		owner.castThisSpell(id);
+	}
+};
+
+void BattleWindow::toggleQueueVisibility()
+{
+	if(settings["battle"]["showQueue"].Bool())
+		hideQueue();
+	else
+		showQueue();
+}
+
+void BattleWindow::hideQueue()
+{
+	if(settings["battle"]["showQueue"].Bool() == false)
+		return;
+
+	Settings showQueue = settings.write["battle"]["showQueue"];
+	showQueue->Bool() = false;
+
+	queue->disable();
+
+	if (!queue->embedded)
+	{
+		//re-center, taking into account stack queue position
+		pos.y += queue->pos.h;
+		pos.h -= queue->pos.h;
+	}
+	pos = center();
+	setPositionInfoWindow();
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::showQueue()
+{
+	if(settings["battle"]["showQueue"].Bool() == true)
+		return;
+
+	Settings showQueue = settings.write["battle"]["showQueue"];
+	showQueue->Bool() = true;
+
+	createQueue();
+	updateQueue();
+	setPositionInfoWindow();
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::toggleStickyHeroWindowsVisibility()
+{
+	if(settings["battle"]["stickyHeroInfoWindows"].Bool())
+		hideStickyHeroWindows();
+	else
+		showStickyHeroWindows();
+}
+
+void BattleWindow::hideStickyHeroWindows()
+{
+	if(settings["battle"]["stickyHeroInfoWindows"].Bool() == false)
+		return;
+
+	Settings showStickyHeroInfoWindows = settings.write["battle"]["stickyHeroInfoWindows"];
+	showStickyHeroInfoWindows->Bool() = false;
+
+	if(attackerHeroWindow)
+		attackerHeroWindow->disable();
+
+	if(defenderHeroWindow)
+		defenderHeroWindow->disable();
+
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::showStickyHeroWindows()
+{
+	if(settings["battle"]["stickyHeroInfoWindows"].Bool() == true)
+		return;
+
+	Settings showStickyHeroInfoWindows = settings.write["battle"]["stickyHeroInfoWindows"];
+	showStickyHeroInfoWindows->Bool() = true;
+
+
+	createStickyHeroInfoWindows();
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::updateQueue()
+{
+	queue->update();
+	createQuickSpellWindow();
+}
+
+void BattleWindow::setPositionInfoWindow()
+{
+	int xOffsetAttacker = quickSpellWindow->isDisabled() ? 0 : -51;
+	int xOffsetDefender = unitActionWindow->isDisabled() ? 0 : 51;
+
+	int yOffsetAttacker = attackerTimerWidget ? attackerTimerWidget->pos.h + 9 : 0;
+	int yOffsetDefender = defenderTimerWidget ? defenderTimerWidget->pos.h + 9 : 0;
+
+	if(defenderHeroWindow)
+	{
+		Point position = placeInfoWindowsOutside()
+				? Point(pos.x + pos.w - 1 + xOffsetDefender, pos.y - 1 + yOffsetDefender)
+				: Point(pos.x + pos.w -79, pos.y + 195);
+		defenderHeroWindow->moveTo(position);
+	}
+	if(attackerHeroWindow)
+	{
+		Point position = placeInfoWindowsOutside()
+				? Point(pos.x - 77 + xOffsetAttacker, pos.y - 1 + yOffsetAttacker)
+				: Point(pos.x + 1, pos.y + 195);
+		attackerHeroWindow->moveTo(position);
+	}
+	if(defenderStackWindow)
+	{
+		Point position = placeInfoWindowsOutside()
+				? Point(pos.x + pos.w - 1 + xOffsetDefender, defenderHeroWindow ? defenderHeroWindow->pos.y + 210 : pos.y - 1 + yOffsetDefender)
+				: Point(pos.x + pos.w -79, defenderHeroWindow ? defenderHeroWindow->pos.y : pos.y + 195);
+		defenderStackWindow->moveTo(position);
+	}
+	if(attackerStackWindow)
+	{
+		Point position = placeInfoWindowsOutside()
+				? Point(pos.x - 77 + xOffsetAttacker, attackerHeroWindow ? attackerHeroWindow->pos.y + 210 : pos.y - 1 + yOffsetAttacker)
+				: Point(pos.x + 1, attackerHeroWindow ? attackerHeroWindow->pos.y : pos.y + 195);
+		attackerStackWindow->moveTo(position);
+	}
+}
+
+void BattleWindow::updateHeroInfoWindow(uint8_t side, const InfoAboutHero & hero)
+{
+	std::shared_ptr<HeroInfoBasicPanel> panelToUpdate = side == 0 ? attackerHeroWindow : defenderHeroWindow;
+	panelToUpdate->update(hero);
+}
+
+void BattleWindow::updateStackInfoWindow(const CStack * stack)
+{
+	OBJECT_CONSTRUCTION;
+
+	bool showInfoWindows = settings["battle"]["stickyHeroInfoWindows"].Bool();
+
+	if(stack && stack->unitSide() == BattleSide::DEFENDER)
+	{
+		defenderStackWindow = std::make_shared<StackInfoBasicPanel>(stack, true);
+		defenderStackWindow->setEnabled(showInfoWindows);
+	}
+	else
+		defenderStackWindow = nullptr;
+	
+	if(stack && stack->unitSide() == BattleSide::ATTACKER)
+	{
+		attackerStackWindow = std::make_shared<StackInfoBasicPanel>(stack, true);
+		attackerStackWindow->setEnabled(showInfoWindows);
+	}
+	else
+		attackerStackWindow = nullptr;
+	
+	createTimerInfoWindows();
+	setPositionInfoWindow();
+}
+
+void BattleWindow::heroManaPointsChanged(const CGHeroInstance * hero)
+{
+	if(hero == owner.attackingHeroInstance || hero == owner.defendingHeroInstance)
+	{
+		InfoAboutHero heroInfo = InfoAboutHero();
+		heroInfo.initFromHero(hero, InfoAboutHero::INBATTLE);
+
+		updateHeroInfoWindow(hero == owner.attackingHeroInstance ? 0 : 1, heroInfo);
+	}
+	else
+	{
+		logGlobal->error("BattleWindow::heroManaPointsChanged: 'Mana points changed' called for hero not belonging to current battle window");
+	}
+}
+
+void BattleWindow::activate()
+{
+	ENGINE->setStatusbar(console);
+	CIntObject::activate();
+	GAME->interface()->cingconsole->activate();
+}
+
+void BattleWindow::deactivate()
+{
+	ENGINE->setStatusbar(nullptr);
+	CIntObject::deactivate();
+	GAME->interface()->cingconsole->deactivate();
+}
+
+bool BattleWindow::captureThisKey(EShortcut key)
+{
+	return owner.openingPlaying();
+}
+
+void BattleWindow::keyPressed(EShortcut key)
+{
+	if (owner.openingPlaying())
+	{
+		owner.openingEnd();
+		return;
+	}
+	InterfaceObjectConfigurable::keyPressed(key);
+}
+
+void BattleWindow::clickPressed(const Point & cursorPosition)
+{
+	if (owner.openingPlaying())
+	{
+		owner.openingEnd();
+		return;
+	}
+	InterfaceObjectConfigurable::clickPressed(cursorPosition);
+}
+
+void BattleWindow::tacticPhaseStarted()
+{
+	auto menuBattle = widget<CIntObject>("menuBattle");
+	auto console = widget<CIntObject>("console");
+	auto menuTactics = widget<CIntObject>("menuTactics");
+	auto tacticNext = widget<CIntObject>("tacticNext");
+	auto tacticEnd = widget<CIntObject>("tacticEnd");
+
+	menuBattle->disable();
+	console->disable();
+
+	menuTactics->enable();
+	tacticNext->enable();
+	tacticEnd->enable();
+
+	redraw();
+}
+
+void BattleWindow::tacticPhaseEnded()
+{
+	auto menuBattle = widget<CIntObject>("menuBattle");
+	auto console = widget<CIntObject>("console");
+	auto menuTactics = widget<CIntObject>("menuTactics");
+	auto tacticNext = widget<CIntObject>("tacticNext");
+	auto tacticEnd = widget<CIntObject>("tacticEnd");
+
+	menuBattle->enable();
+	console->enable();
+
+	menuTactics->disable();
+	tacticNext->disable();
+	tacticEnd->disable();
+
+	redraw();
+}
+
+void BattleWindow::bOptionsf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	ENGINE->cursor().set(Cursor::Map::POINTER);
+
+	ENGINE->windows().createAndPushWindow<SettingsMainWindow>(&owner);
+}
+
+void BattleWindow::bSurrenderf()
+{
+	if (owner.curInt->cb->getMapHeader()->battleOnly)
+		return;
+
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	int cost = owner.getBattle()->battleGetSurrenderCost();
+	if(cost >= 0)
+	{
+		std::string enemyHeroName = owner.getBattle()->battleGetEnemyHero().name;
+		if(enemyHeroName.empty())
+		{
+			logGlobal->warn("Surrender performed without enemy hero, should not happen!");
+			enemyHeroName = "#ENEMY#";
+		}
+
+		std::string surrenderMessage = boost::str(boost::format(LIBRARY->generaltexth->allTexts[32]) % enemyHeroName % cost); //%s states: "I will accept your surrender and grant you and your troops safe passage for the price of %d gold."
+		owner.curInt->showYesNoDialog(surrenderMessage, [this](){ reallySurrender(); }, nullptr);
+	}
+}
+
+void BattleWindow::bFleef()
+{
+	if (owner.curInt->cb->getMapHeader()->battleOnly)
+		return;
+
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	if ( owner.getBattle()->battleCanFlee() )
+	{
+		auto ony = std::bind(&BattleWindow::reallyFlee,this);
+		owner.curInt->showYesNoDialog(LIBRARY->generaltexth->allTexts[28], ony, nullptr); //Are you sure you want to retreat?
+	}
+	else
+	{
+		std::vector<std::shared_ptr<CComponent>> comps;
+		std::string heroName;
+		//calculating fleeing hero's name
+		if (owner.attackingHeroInstance)
+			if (owner.attackingHeroInstance->tempOwner == owner.curInt->cb->getPlayerID())
+				heroName = owner.attackingHeroInstance->getNameTranslated();
+		if (owner.defendingHeroInstance)
+			if (owner.defendingHeroInstance->tempOwner == owner.curInt->cb->getPlayerID())
+				heroName = owner.defendingHeroInstance->getNameTranslated();
+		//calculating text
+		auto txt = boost::format(LIBRARY->generaltexth->allTexts[340]) % heroName; //The Shackles of War are present.  %s can not retreat!
+
+		//printing message
+		owner.curInt->showInfoDialog(boost::str(txt), comps);
+	}
+}
+
+void BattleWindow::reallyFlee()
+{
+	owner.giveCommand(EActionType::RETREAT);
+	ENGINE->cursor().set(Cursor::Map::POINTER);
+}
+
+void BattleWindow::reallySurrender()
+{
+	if (owner.curInt->cb->getResourceAmount(EGameResID::GOLD) < owner.getBattle()->battleGetSurrenderCost())
+	{
+		owner.curInt->showInfoDialog(LIBRARY->generaltexth->allTexts[29]); //You don't have enough gold!
+	}
+	else
+	{
+		owner.giveCommand(EActionType::SURRENDER);
+		ENGINE->cursor().set(Cursor::Map::POINTER);
+	}
+}
+
+void BattleWindow::setPossibleActions(const std::vector<PossiblePlayerBattleAction> & actions)
+{
+	unitActionWindow->setPossibleActions(actions);
+}
+
+void BattleWindow::bAutofightf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	if(!owner.curInt->cb->getMapHeader()->battleOnly && settings["battle"]["endWithAutocombat"].Bool() && onlyOnePlayerHuman)
+	{
+		endWithAutocombat();
+		return;
+	}
+
+	//Stop auto-fight mode
+	if(owner.curInt->isAutoFightOn)
+	{
+		assert(owner.curInt->autofightingAI);
+		owner.curInt->isAutoFightOn = false;
+		logGlobal->trace("Stopping the autofight...");
+	}
+	else if(!owner.curInt->autofightingAI)
+	{
+		owner.curInt->isAutoFightOn = true;
+		blockUI(true);
+
+		owner.curInt->prepareAutoFightingAI(owner.getBattleID(), owner.army1, owner.army2, int3(0,0,0), owner.attackingHeroInstance, owner.defendingHeroInstance, owner.getBattle()->battleGetMySide());
+		owner.requestAutofightingAIToTakeAction();
+	}
+}
+
+void BattleWindow::bSpellf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	if (!owner.makingTurn())
+		return;
+
+	auto myHero = owner.currentHero();
+	if(!myHero)
+		return;
+
+	ENGINE->cursor().set(Cursor::Map::POINTER);
+
+	ESpellCastProblem spellCastProblem = owner.getBattle()->battleCanCastSpell(myHero, spells::Mode::HERO);
+
+	if(spellCastProblem == ESpellCastProblem::OK)
+	{
+		ENGINE->windows().createAndPushWindow<CSpellWindow>(myHero, owner.curInt.get());
+	}
+	else if (spellCastProblem == ESpellCastProblem::MAGIC_IS_BLOCKED)
+	{
+		//TODO: move to spell mechanics, add more information to spell cast problem
+		//Handle Orb of Inhibition-like effects -> we want to display dialog with info, why casting is impossible
+		auto blockingBonus = owner.currentHero()->getFirstBonus(Selector::type()(BonusType::BLOCK_ALL_MAGIC));
+		if (!blockingBonus)
+			return;
+
+		if (blockingBonus->source == BonusSource::ARTIFACT)
+		{
+			const auto artID = blockingBonus->sid.as<ArtifactID>();
+			//If we have artifact, put name of our hero. Otherwise assume it's the enemy.
+			//TODO check who *really* is source of bonus
+			std::string heroName = myHero->hasArt(artID, true) ? myHero->getNameTranslated() : owner.enemyHero().name;
+
+			//%s wields the %s, an ancient artifact which creates a p dead to all magic.
+			GAME->interface()->showInfoDialog(boost::str(boost::format(LIBRARY->generaltexth->allTexts[683])
+										% heroName % LIBRARY->artifacts()->getByIndex(artID)->getNameTranslated()));
+		}
+		else if(blockingBonus->source == BonusSource::OBJECT_TYPE)
+		{
+			if(blockingBonus->sid.as<MapObjectID>() == Obj::GARRISON || blockingBonus->sid.as<MapObjectID>() == Obj::GARRISON2)
+				GAME->interface()->showInfoDialog(LIBRARY->generaltexth->allTexts[684]);
+		}
+	}
+	else
+	{
+		logGlobal->warn("Unexpected problem with readiness to cast spell");
+	}
+}
+
+void BattleWindow::bWaitf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	if (owner.stacksController->getActiveStack() != nullptr)
+		owner.giveCommand(EActionType::WAIT);
+}
+
+void BattleWindow::bDefencef()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	if (owner.stacksController->getActiveStack() != nullptr)
+		owner.giveCommand(EActionType::DEFEND);
+}
+
+void BattleWindow::bConsoleUpf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	console->scrollUp();
+}
+
+void BattleWindow::bConsoleDownf()
+{
+	if (owner.actionsController->heroSpellcastingModeActive())
+		return;
+
+	console->scrollDown();
+}
+
+void BattleWindow::bTacticNextStack()
+{
+	owner.tacticNextStack(nullptr);
+}
+
+void BattleWindow::bTacticPhaseEnd()
+{
+	owner.tacticPhaseEnd();
+}
+
+void BattleWindow::blockUI(bool on)
+{
+	bool canCastSpells = false;
+	auto hero = owner.getBattle()->battleGetMyHero();
+
+	if(hero)
+	{
+		ESpellCastProblem spellcastingProblem = owner.getBattle()->battleCanCastSpell(hero, spells::Mode::HERO);
+
+		//if magic is blocked, we leave button active, so the message can be displayed after button click
+		canCastSpells = spellcastingProblem == ESpellCastProblem::OK || spellcastingProblem == ESpellCastProblem::MAGIC_IS_BLOCKED;
+	}
+
+	bool canWait = owner.stacksController->getActiveStack() ? !owner.stacksController->getActiveStack()->waitedThisTurn : false;
+
+	setShortcutBlocked(EShortcut::GLOBAL_OPTIONS, on);
+	setShortcutBlocked(EShortcut::BATTLE_OPEN_ACTIVE_UNIT, on);
+	setShortcutBlocked(EShortcut::BATTLE_OPEN_HOVERED_UNIT, on);
+	setShortcutBlocked(EShortcut::BATTLE_RETREAT, on || !owner.getBattle()->battleCanFlee());
+	setShortcutBlocked(EShortcut::BATTLE_SURRENDER, on || owner.getBattle()->battleGetSurrenderCost() < 0);
+	setShortcutBlocked(EShortcut::BATTLE_CAST_SPELL, on || owner.tacticsMode || !canCastSpells);
+	setShortcutBlocked(EShortcut::BATTLE_WAIT, on || owner.tacticsMode || !canWait);
+	setShortcutBlocked(EShortcut::BATTLE_DEFEND, on || owner.tacticsMode);
+	setShortcutBlocked(EShortcut::BATTLE_AUTOCOMBAT, (settings["battle"]["endWithAutocombat"].Bool() && onlyOnePlayerHuman) ? on || owner.tacticsMode || owner.actionsController->heroSpellcastingModeActive() : owner.actionsController->heroSpellcastingModeActive());
+	setShortcutBlocked(EShortcut::BATTLE_END_WITH_AUTOCOMBAT, on || !onlyOnePlayerHuman || owner.actionsController->heroSpellcastingModeActive());
+	setShortcutBlocked(EShortcut::BATTLE_TACTICS_END, on || !owner.tacticsMode);
+	setShortcutBlocked(EShortcut::BATTLE_TACTICS_NEXT, on || !owner.tacticsMode);
+	setShortcutBlocked(EShortcut::BATTLE_CONSOLE_DOWN, on && !owner.tacticsMode);
+	setShortcutBlocked(EShortcut::BATTLE_CONSOLE_UP, on && !owner.tacticsMode);
+
+	quickSpellWindow->setInputEnabled(!on);
+	unitActionWindow->setInputEnabled(!on);
+}
+
+void BattleWindow::bOpenActiveUnit()
+{
+	const auto * unit = owner.stacksController->getActiveStack();
+
+	if (unit)
+		ENGINE->windows().createAndPushWindow<CStackWindow>(unit, false);
+}
+
+void BattleWindow::bOpenHoveredUnit()
+{
+	const auto units = owner.stacksController->getHoveredStacksUnitIds();
+
+	if (!units.empty())
+	{
+		const auto * unit = owner.getBattle()->battleGetStackByID(units[0]);
+		if (unit)
+			ENGINE->windows().createAndPushWindow<CStackWindow>(unit, false);
+	}
+}
+
+std::optional<uint32_t> BattleWindow::getQueueHoveredUnitId()
+{
+	return queue->getHoveredUnitIdIfAny();
+}
+
+void BattleWindow::endWithAutocombat() 
+{
+	if (owner.curInt->cb->getMapHeader()->battleOnly)
+		return;
+
+	if(!owner.makingTurn())
+		return;
+
+	GAME->interface()->showYesNoDialog(
+		LIBRARY->generaltexth->translate("vcmi.battleWindow.endWithAutocombat"),
+		[this]()
+		{
+			owner.curInt->isAutoFightEndBattle = true;
+			owner.curInt->prepareAutoFightingAI(owner.getBattleID(), owner.army1, owner.army2, int3(0,0,0), owner.attackingHeroInstance, owner.defendingHeroInstance, owner.getBattle()->battleGetMySide());
+
+			owner.requestAutofightingAIToTakeAction();
+
+			close();
+
+			owner.curInt->battleInt.reset();
+		},
+		nullptr
+	);
+}
+
+void BattleWindow::showEnemyHeroWindow(const CGHeroInstance * hero)
+{
+	if(!hero)
+		return;
+	if(enemyHeroWindowVisible)
+	{
+		if(enemyHeroWindow && enemyHeroWindow->curHero == hero)
+			closeEnemyHeroWindow();
+		return;
+	}
+
+	if(!enemyHeroWindow || enemyHeroWindow->curHero != hero)
+		enemyHeroWindow = std::make_shared<CHeroWindow>(hero, true, [this](){ closeEnemyHeroWindow(); });
+
+	addChild(enemyHeroWindow.get());
+	enemyHeroWindowVisible = true;
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::closeEnemyHeroWindow()
+{
+	if(!enemyHeroWindow || !enemyHeroWindowVisible)
+		return;
+
+	enemyHeroWindow->deactivate();
+	removeChild(enemyHeroWindow.get());
+	enemyHeroWindowVisible = false;
+	ENGINE->windows().totalRedraw();
+}
+
+void BattleWindow::destroyEnemyHeroWindow()
+{
+	closeEnemyHeroWindow();
+	enemyHeroWindow.reset();
+}
+
+void BattleWindow::quiesceForBattleResult()
+{
+	destroyEnemyHeroWindow();
+	// Most children stop receiving events when the battle window is deactivated.
+	// Battle timer widgets deliberately survive normal deactivation, so disable
+	// them explicitly before BattleEnded can remove their battle state.
+	quiescedForBattleResult = true;
+	deactivate();
+	if(attackerTimerWidget)
+		attackerTimerWidget->disable();
+	if(defenderTimerWidget)
+		defenderTimerWidget->disable();
+}
+
+void BattleWindow::hideArenaExitButtons()
+{
+	if (arenaExitButtonsHidden)
+		return;
+
+	for (const auto & name : {"surrender", "flee"})
+	{
+		if (const auto button = widget<CIntObject>(name))
+			removeChild(button.get());
+		deleteWidget(name);
+	}
+
+	arenaExitButtonsHidden = true;
+}
+
+void BattleWindow::showAll(Canvas & to)
+{
+	if(quiescedForBattleResult)
+		return;
+
+	if(owner.curInt->cb->getMapHeader()->battleOnly)
+		to.fillTexture(ENGINE->renderHandler().loadImage(ImagePath::builtin("DiBoxBck"), EImageBlitMode::OPAQUE));
+	CIntObject::showAll(to);
+
+	if (ENGINE->screenDimensions().x != 800 || ENGINE->screenDimensions().y !=600)
+		to.drawBorder(Rect(pos.x-1, pos.y - (queue && queue->embedded ? 1 : 0), pos.w+2, pos.h+1 + (queue && queue->embedded ? 1 : 0)), Colors::BRIGHT_YELLOW);
+}
+
+void BattleWindow::show(Canvas & to)
+{
+	if(quiescedForBattleResult)
+		return;
+
+	if(owner.curInt->cb->getMapHeader()->battleOnly)
+		hideArenaExitButtons();
+
+	CIntObject::show(to);
+	GAME->interface()->cingconsole->show(to);
+
+	if(!owner.curInt->cb->getMapHeader()->battleOnly)
+	{
+		if(enemyHeroWindowVisible && enemyHeroWindow)
+			enemyHeroWindow->showAll(to);
+		return;
+	}
+
+	const auto battle = owner.getBattle();
+	const auto attackerHealth = GAME->server().client->getArenaHealth(battle->sideToPlayer(BattleSide::ATTACKER));
+	const auto defenderHealth = GAME->server().client->getArenaHealth(battle->sideToPlayer(BattleSide::DEFENDER));
+
+	const Point attackerHealthPosition(pos.x + 80, pos.y + 100);
+	const Point defenderHealthPosition(pos.x + pos.w - 80, pos.y + 100);
+	to.drawText(attackerHealthPosition, FONT_MEDIUM, Colors::RED, ETextAlignment::TOPLEFT, "ATTACKER HP: " + (attackerHealth ? std::to_string(*attackerHealth) : "--"));
+	to.drawText(defenderHealthPosition, FONT_MEDIUM, Colors::CYAN, ETextAlignment::BOTTOMRIGHT, "DEFENDER HP: " + (defenderHealth ? std::to_string(*defenderHealth) : "--"));
+
+	// The battlefield is redrawn by other BattleWindow children during incremental
+	// frames, so keep the embedded inspection panel as the final visible layer.
+	if(enemyHeroWindowVisible && enemyHeroWindow)
+		enemyHeroWindow->showAll(to);
+}
+
+void BattleWindow::onScreenResize()
+{
+	if(settings["battle"]["showQueue"].Bool())
+	{
+		hideQueue();
+		showQueue();
+	}
+	if(settings["battle"]["enableQuickSpellPanel"].Bool())
+	{
+		hideStickyQuickSpellWindow();
+		showStickyQuickSpellWindow();
+	}
+	if(settings["battle"]["stickyHeroInfoWindows"].Bool())
+	{
+		hideStickyHeroWindows();
+		showStickyHeroWindows();
+	}
+}
+
+void BattleWindow::close()
+{
+	if(!ENGINE->windows().isTopWindow(this))
+		logGlobal->error("Only top interface must be closed");
+	ENGINE->windows().popWindows(1);
+}
+
+bool BattleWindow::hasSpaceForQuickActions() const
+{
+	constexpr int widthWithQuickActions = 800 + 50*2;
+
+	return ENGINE->screenDimensions().x >= widthWithQuickActions;
+}
+
+bool BattleWindow::placeInfoWindowsOutside() const
+{
+	constexpr int widthWithQuickActions = 800 + 50*2 + 75*2;
+	constexpr int widthBaseWindow = 800 + 75*2;
+
+	if (quickActionsPanelActive())
+		return ENGINE->screenDimensions().x >= widthWithQuickActions;
+	else
+		return ENGINE->screenDimensions().x >= widthBaseWindow;
+}
+
+bool BattleWindow::quickActionsPanelActive() const
+{
+	return unitActionWindow->isActive();
+}

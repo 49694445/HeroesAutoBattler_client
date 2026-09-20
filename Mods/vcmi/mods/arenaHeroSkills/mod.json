@@ -1,0 +1,16 @@
+{
+	"name" : "Arena hero starting skills",
+	"description" : "Overrides starting secondary skills for heroes available in BattleOnlyMode.",
+	"version" : "1.0",
+	"author" : "VCMI Arena",
+	"modType" : "Mechanics",
+	"softDepends" : [
+		"hota.cove",
+		"hota.factory",
+		"hota.gamebalance.heroes",
+		"hota.interference"
+	],
+	"heroes" : [
+		"config/arenaHeroStartingSkills"
+	]
+}

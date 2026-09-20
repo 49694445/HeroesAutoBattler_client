@@ -1,0 +1,482 @@
+{
+	"centaur" :
+	{
+		"index": 14,
+		"level": 1,
+		"faction": "rampart",
+		"upgrades": ["centaurCaptain"],
+		"doubleWide" : true,
+		"hasDoubleWeek": true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:28",
+			"mapAttackFromLeft": "AvWattak.def:0:29",
+			"animation": "CCENTR.DEF"
+		},
+		"sound" :
+		{
+			"attack": "CNTRATTK.wav",
+			"defend": "CNTRDFND.wav",
+			"killed": "CNTRKILL.wav",
+			"move": "CNTRMOVE.wav",
+			"shoot": "CNTRSHOT.wav",
+			"wince": "CNTRWNCE.wav"
+		}
+	},
+	"centaurCaptain" :
+	{
+		"index": 15,
+		"level": 1,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:30",
+			"mapAttackFromLeft": "AvWattak.def:0:31",
+			"animation": "CECENT.DEF"
+		},
+		"sound" :
+		{
+			"attack": "ECNTATTK.wav",
+			"defend": "ECNTDFND.wav",
+			"killed": "ECNTKILL.wav",
+			"move": "ECNTMOVE.wav",
+			"wince": "ECNTWNCE.wav"
+		}
+	},
+	"dwarf" :
+	{
+		"index": 16,
+		"level": 2,
+		"faction": "rampart",
+		"abilities":
+		{
+			"magicResistance" :
+			{
+				"type" : "MAGIC_RESISTANCE",
+				"val" : 20
+			}
+		},
+		"upgrades": ["battleDwarf"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:32",
+			"mapAttackFromLeft": "AvWattak.def:0:33",
+			"animation": "CDWARF.DEF"
+		},
+		"sound" :
+		{
+			"attack": "DWRFATTK.wav",
+			"defend": "DWRFDFND.wav",
+			"killed": "DWRFKILL.wav",
+			"move": "DWRFMOVE.wav",
+			"wince": "DWRFWNCE.wav"
+		}
+	},
+	"battleDwarf" :
+	{
+		"index": 17,
+		"level": 2,
+		"faction": "rampart",
+		"abilities":
+		{
+			"magicResistance" :
+			{
+				"type" : "MAGIC_RESISTANCE",
+				"val" : 40
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:34",
+			"mapAttackFromLeft": "AvWattak.def:0:35",
+			"animation": "CBDWAR.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BDRFATTK.wav",
+			"defend": "BDRFDFND.wav",
+			"killed": "BDRFKILL.wav",
+			"move": "BDRFMOVE.wav",
+			"wince": "BDRFWNCE.wav"
+		}
+	},
+	"woodElf" :
+	{
+		"index": 18,
+		"level": 3,
+		"faction": "rampart",
+		"upgrades": ["grandElf"],
+		"shots" : 24,
+		"abilities" :
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:36",
+			"mapAttackFromLeft": "AvWattak.def:0:37",
+			"animation": "CELF.DEF",
+			"missile" :
+			{
+				"projectile": "PELFX.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "WELFATTK.wav",
+			"defend": "WELFDFND.wav",
+			"killed": "WELFKILL.wav",
+			"move": "WELFMOVE.wav",
+			"shoot": "WELFSHOT.wav",
+			"wince": "WELFWNCE.wav"
+		}
+	},
+	"grandElf" :
+	{
+		"index": 19,
+		"level": 3,
+		"faction": "rampart",
+		"shots" : 24,
+		"abilities" :
+		{
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"doubleShot" :
+			{
+				"type": "ADDITIONAL_ATTACK",
+				"val" : 1,
+				"description" : "@creatures.core.marksman.bonus.extraAttack",
+				"effectRange": "ONLY_DISTANCE_FIGHT"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:38",
+			"mapAttackFromLeft": "AvWattak.def:0:39",
+			"animation": "CGRELF.DEF",
+			"missile" :
+			{
+				"projectile": "PELFX.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "GELFATTK.wav",
+			"defend": "GELFDFND.wav",
+			"killed": "GELFKILL.wav",
+			"move": "GELFMOVE.wav",
+			"shoot": "GELFSHOT.wav",
+			"wince": "GELFWNCE.wav"
+		}
+	},
+	"pegasus" :
+	{
+		"index": 20,
+		"level": 4,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"increaseManaCost" :
+			{
+				"type" : "CHANGES_SPELL_COST_FOR_ENEMY",
+				"val" : 2
+			}
+		},
+		"upgrades": ["silverPegasus"],
+		"hasDoubleWeek": true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:40",
+			"mapAttackFromLeft": "AvWattak.def:0:41",
+			"animation": "CPEGAS.DEF"
+		},
+		"sound" :
+		{
+			"attack": "PEGAATTK.wav",
+			"defend": "PEGADFND.wav",
+			"killed": "PEGAKILL.wav",
+			"move": "PEGAMOVE.wav",
+			"wince": "PEGAWNCE.wav"
+		}
+	},
+	"silverPegasus" :
+	{
+		"index": 21,
+		"level": 4,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"increaseManaCost" :
+			{
+				"type" : "CHANGES_SPELL_COST_FOR_ENEMY",
+				"val" : 2
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:42",
+			"mapAttackFromLeft": "AvWattak.def:0:43",
+			"animation": "CAPEGS.DEF"
+		},
+		"sound" :
+		{
+			"attack": "APEGATTK.wav",
+			"defend": "APEGDFND.wav",
+			"killed": "APEGKILL.wav",
+			"move": "APEGMOVE.wav",
+			"wince": "APEGWNCE.wav"
+		}
+	},
+	"dendroidGuard" :
+	{
+		"index": 22,
+		"level": 5,
+		"faction": "rampart",
+		"abilities":
+		{
+			"binds" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.bind",
+				"val" : 100
+			}
+		},
+		"upgrades": ["dendroidSoldier"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:44",
+			"mapAttackFromLeft": "AvWattak.def:0:45",
+			"animation": "CTREE.DEF"
+		},
+		"sound" :
+		{
+			"attack": "TREEATTK.wav",
+			"defend": "TREEDFND.wav",
+			"killed": "TREEKILL.wav",
+			"move": "TREEMOVE.wav",
+			"wince": "TREEWNCE.wav"
+		}
+	},
+	"dendroidSoldier" :
+	{
+		"index": 23,
+		"level": 5,
+		"faction": "rampart",
+		"abilities":
+		{
+			"binds" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.bind",
+				"val" : 100
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:46",
+			"mapAttackFromLeft": "AvWattak.def:0:47",
+			"animation": "CBTREE.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BTREATTK.wav",
+			"defend": "BTREDFND.wav",
+			"killed": "BTREKILL.wav",
+			"move": "BTREMOVE.wav",
+			"wince": "BTREWNCE.wav"
+		}
+	},
+	"unicorn" :
+	{
+		"index": 24,
+		"level": 6,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"blinds" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.blind",
+				"val" : 20,
+				"addInfo" : [3,0]
+			},
+			"spellResistAura" :
+			{
+				"type" : "SPELL_RESISTANCE_AURA",
+				"val" : 20
+			}
+		},
+		"upgrades": ["warUnicorn"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:48",
+			"mapAttackFromLeft": "AvWattak.def:0:49",
+			"animation": "CUNICO.DEF"
+		},
+		"sound" :
+		{
+			"attack": "UNICATTK.wav",
+			"defend": "UNICDFND.wav",
+			"killed": "UNICKILL.wav",
+			"move": "UNICMOVE.wav",
+			"wince": "UNICWNCE.wav"
+		}
+	},
+	"warUnicorn" :
+	{
+		"index": 25,
+		"level": 6,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"blinds" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.blind",
+				"val" : 20,
+				"addInfo" : [3,0]
+			},
+			"spellResistAura" :
+			{
+				"type" : "SPELL_RESISTANCE_AURA",
+				"val" : 20
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:50",
+			"mapAttackFromLeft": "AvWattak.def:0:51",
+			"animation": "CWUNIC.DEF"
+		},
+		"sound" :
+		{
+			"attack": "WUNCATTK.wav",
+			"defend": "WUNCDFND.wav",
+			"killed": "WUNCKILL.wav",
+			"move": "WUNCMOVE.wav",
+			"shoot": "WUNCSHOT.wav",
+			"wince": "WUNCWNCE.wav"
+		}
+	},
+	"greenDragon" :
+	{
+		"index": 26,
+		"level": 7,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"dragon" :
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"dragonSkeleton" : 
+			{
+				"type" : "SKELETON_TRANSFORMER_TARGET",
+				"subtype" : "boneDragon"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"twoHexAttackBreath" :
+			{
+				"type" : "TWO_HEX_ATTACK_BREATH"
+			},
+			"spellImmunity" :
+			{
+				"type" : "LEVEL_SPELL_IMMUNITY",
+				"val" : 3
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			}
+		},
+		"upgrades": ["goldDragon"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:52",
+			"mapAttackFromLeft": "AvWattak.def:0:53",
+			"animation": "CGDRAG.DEF"
+		},
+		"sound" :
+		{
+			"attack": "GRDRATTK.wav",
+			"defend": "GRDRDFND.wav",
+			"killed": "GRDRKILL.wav",
+			"move": "GRDRMOVE.wav",
+			"wince": "GRDRWNCE.wav"
+		}
+	},
+	"goldDragon" :
+	{
+		"index": 27,
+		"level": 7,
+		"faction": "rampart",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"dragon" :
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"dragonSkeleton" : 
+			{
+				"type" : "SKELETON_TRANSFORMER_TARGET",
+				"subtype" : "boneDragon"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"twoHexAttackBreath" :
+			{
+				"type" : "TWO_HEX_ATTACK_BREATH"
+			},
+			"spellImmunity" :
+			{
+				"type" : "LEVEL_SPELL_IMMUNITY",
+				"val" : 4
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:54",
+			"mapAttackFromLeft": "AvWattak.def:0:55",
+			"animation": "CDDRAG.DEF"
+		},
+		"sound" :
+		{
+			"attack": "GODRATTK.wav",
+			"defend": "GODRDFND.wav",
+			"killed": "GODRKILL.wav",
+			"move": "GODRMOVE.wav",
+			"wince": "GODRWNCE.wav"
+		}
+	}
+}

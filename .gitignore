@@ -1,0 +1,7 @@
+/build*/
+/conan-*/
+CMakeUserPresets.json
+*.user
+*.keystore
+*.jks
+/.gradle/

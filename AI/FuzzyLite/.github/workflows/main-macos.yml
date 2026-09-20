@@ -1,0 +1,35 @@
+name: macOS Build
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        cxx-standard: [ 98, 11, 23 ]
+        use_float: [ OFF, ON ]
+        generator: [ "Unix Makefiles" , "Xcode" ]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache dependencies
+        id: fuzzylite-cache
+        uses: actions/cache@v3
+        with:
+          path: .local/
+          key: ${{ runner.os }}-build-${{ hashFiles('tools/dev/pyproject.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Building FuzzyLite
+        env:
+          CMAKE_GENERATOR: ${{ matrix.generator }}
+        run: |
+          make devtools && source `make venv_activate`
+          nox -e install_catch2
+          nox -- strict=on cxx_standard=${{ matrix.cxx-standard }} use_float=${{ matrix.use_float }}

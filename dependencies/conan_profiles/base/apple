@@ -1,0 +1,22 @@
+{% import 'vars.jinja' as vars %}
+
+include(common)
+
+[settings]
+compiler=apple-clang
+compiler.cppstd={{ vars.cppstd }}
+compiler.libcxx=libc++
+compiler.version=16
+
+{{ vars.glaze_cppstd }}
+
+# can't be built under C++20 due to error coming from system headers:
+# 'to_chars' is unavailable: introduced in macOS 13.3 / iOS 16.3
+onnxruntime/*:compiler.cppstd=17
+
+[conf]
+tools.apple:enable_bitcode=False
+
+[options]
+qt/*:openssl=False
+sdl_image/*:imageio=True

@@ -1,0 +1,19 @@
+{
+  "upstream": "https://github.com/vcmi/vcmi",
+  "upstreamBase": "9949b089a45338e00a62debe6f613c31cfd07ebe",
+  "submodules": {
+    "dependencies": "ee4730dafc885549baf75eb21e25338efa749d2a",
+    "AI/FuzzyLite": "13b3122f5c353c0389ed4e66041d548c44ec9df6",
+    "launcher/lib/innoextract": "96e9566a35fb51ebf13ffbdadfd49a93c1ae5c1a"
+  },
+  "profile": "VCMI_REMOTE_CLIENT_ONLY",
+  "excluded": [
+    "private server",
+    "Nullkiller/Nullkiller2 adventure AI",
+    "config/ai",
+    "credentials and signing keys",
+    "development history",
+    "Heroes III original data",
+    "HotA and translation asset bundles"
+  ]
+}

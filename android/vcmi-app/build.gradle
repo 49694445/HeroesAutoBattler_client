@@ -1,0 +1,171 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.github.zellius.shortcut-helper'
+
+def habRemoteClientOnly = project.findProperty('habRemoteClientOnly') == 'true'
+if (habRemoteClientOnly && (!project.findProperty('habApplicationId') ||
+	project.property('habApplicationId').toString().startsWith('is.xyz.vcmi'))) {
+	throw new GradleException('The remote client requires an independent application ID')
+}
+
+android {
+	/*******************************************************
+	 * The following variables:
+	 * - androidBuildToolsVersion,
+	 * - androidCompileSdkVersion
+	 * - qt5AndroidDir - holds the path to qt android files
+	 *                   needed to build any Qt application
+	 *                   on Android.
+	 *
+	 * are defined in gradle.properties file. This file is
+	 * updated by QtCreator and androiddeployqt tools.
+	 * Changing them manually might break the compilation!
+	 *******************************************************/
+
+	namespace = "eu.vcmi.vcmi"
+
+	buildToolsVersion = androidBuildToolsVersion
+	ndkVersion = androidNdkVersion // Qt generates this property
+
+	buildFeatures {
+		aidl = true
+		buildConfig = true
+	}
+
+	defaultConfig {
+		applicationId project.findProperty('habApplicationId') ?: 'is.xyz.vcmi'
+
+		compileSdk = androidCompileSdkVersion.takeAfter("-") as Integer // has "android-" prepended
+		minSdk = qtMinSdkVersion as Integer
+		targetSdk = qtTargetSdkVersion as Integer // ANDROID_TARGET_SDK_VERSION in the CMake project
+
+		versionCode 1757
+		versionName "1.7.4"
+	}
+
+	sourceSets {
+		main {
+			// Qt requires these to be in the android project root
+			manifest.srcFile '../AndroidManifest.xml'
+			jniLibs.srcDirs = ['../libs']
+			assets.srcDirs = ['../assets']
+
+			java.srcDirs = [qt5AndroidDir + '/src', 'src', SDL_JAVA_SRC_DIR]
+			aidl.srcDirs = [qt5AndroidDir + '/src', 'src', 'aidl']
+			res.srcDirs = [qt5AndroidDir + '/res', 'src/main/res', '../res']
+		}
+	}
+
+	signingConfigs {
+		releaseSigning
+		dailySigning
+		if (!habRemoteClientOnly) {
+			LoadSigningConfig("releaseSigning")
+			LoadSigningConfig("dailySigning")
+		}
+		debug {
+			if (project.findProperty('habDebugKeystore')) {
+				storeFile file(project.property('habDebugKeystore'))
+				storePassword 'android'
+				keyAlias 'androiddebugkey'
+				keyPassword 'android'
+			}
+		}
+	}
+
+	buildTypes {
+		debug {
+			debuggable true
+			applicationIdSuffix '.debug'
+			manifestPlaceholders = [
+				applicationLabel: (project.findProperty('applicationLabel') ?: 'VCMI') + ' test',
+				applicationVariant: 'debug',
+			]
+			ndk {
+				debugSymbolLevel 'full'
+			}
+		}
+		release {
+			minifyEnabled false
+			zipAlignEnabled true
+			applicationIdSuffix = project.findProperty('applicationIdSuffix')
+			signingConfig = habRemoteClientOnly ? null : signingConfigs[project.findProperty('signingConfig') ?: 'releaseSigning']
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			manifestPlaceholders = [
+				applicationLabel: project.findProperty('applicationLabel') ?: 'VCMI',
+				applicationVariant: project.findProperty('applicationVariant') ?: '',
+			]
+			ndk {
+				debugSymbolLevel 'full'
+			}
+		}
+	}
+
+	tasks.withType(JavaCompile) {
+		options.compilerArgs += ["-Xlint:deprecation"]
+	}
+
+	compileOptions {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
+
+	// Do not compress Qt binary resources file
+	aaptOptions {
+		noCompress 'rcc'
+	}
+}
+
+base.archivesName = "vcmi"
+shortcutHelper.filePath = "../shortcuts.xml"
+
+def SigningPropertiesPath(final basePath, final signingConfigKey) {
+	return file("${basePath}/${signingConfigKey}.properties")
+}
+
+def SigningKeystorePath(final basePath, final keystoreFileName) {
+	return file("${basePath}/${keystoreFileName}")
+}
+
+def LoadSigningConfig(final signingConfigKey) {
+	final def props = new Properties()
+	final def propFile = SigningPropertiesPath(signingRoot, signingConfigKey)
+
+	def signingConfig = android.signingConfigs.getAt(signingConfigKey)
+
+	if (propFile.canRead()) {
+		props.load(new FileInputStream(propFile))
+
+		if (props != null
+			&& props.containsKey('STORE_FILE')
+			&& props.containsKey('KEY_ALIAS')) {
+
+			signingConfig.storeFile = SigningKeystorePath(signingRoot, props['STORE_FILE'])
+			signingConfig.keyAlias = props['KEY_ALIAS']
+
+			if(props.containsKey('STORE_PASSWORD'))
+				signingConfig.storePassword = props['STORE_PASSWORD']
+			else
+				signingConfig.storePassword = System.getenv("ANDROID_STORE_PASSWORD")
+
+			if(props.containsKey('KEY_PASSWORD'))
+				signingConfig.keyPassword = props['KEY_PASSWORD']
+			else
+				signingConfig.keyPassword = System.getenv("ANDROID_KEY_PASSWORD")
+		} else {
+			println("Some props from signing file are missing")
+			android.signingConfigs.putAt(signingConfigKey, null)
+		}
+	} else {
+		println("file with signing properties is missing")
+		android.signingConfigs.putAt(signingConfigKey, null)
+	}
+}
+
+dependencies {
+	implementation fileTree(dir: '../libs', include: ['*.jar', '*.aar'])
+	implementation('androidx.annotation:annotation:1.9.1')
+
+	// later versions require API level 21
+	implementation('androidx.appcompat:appcompat:1.6.1')
+	implementation('androidx.documentfile:documentfile:1.0.1')
+}

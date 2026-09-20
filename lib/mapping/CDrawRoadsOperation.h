@@ -1,0 +1,106 @@
+/*
+ * CDrawRoadsOperation.h, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+ 
+#pragma once
+ 
+#include "CMapOperation.h"
+
+VCMI_LIB_NAMESPACE_BEGIN
+
+struct TerrainTile;
+
+template <typename T> class CDrawLinesOperation : public CMapOperation
+{
+public:
+	void execute() override;
+	void undo() override;
+	void redo() override;
+	
+protected:
+	
+	struct LinePattern
+	{
+		std::string data[9];
+		std::pair<int, int> roadMapping;
+		std::pair<int, int> riverMapping;
+		bool hasHFlip;
+		bool hasVFlip;
+	};
+	
+	struct ValidationResult
+	{
+		ValidationResult(bool result): result(result), flip(0){};
+		bool result;
+		int flip;
+	};
+
+	CDrawLinesOperation(CMap * map, CTerrainSelection terrainSel, T lineType, vstd::RNG * gen);
+
+	virtual void executeTile(TerrainTile & tile, T type) = 0;
+	virtual bool canApplyPattern(const LinePattern & pattern) const = 0;
+	virtual bool needUpdateTile(const TerrainTile & tile) const = 0;
+	virtual bool tileHasSomething(const int3 & pos) const = 0;
+	virtual void updateTile(TerrainTile & tile, const LinePattern & pattern, const int flip) = 0;
+	virtual T getIdentifier(TerrainTile & tile) const = 0;
+
+	static const std::vector<LinePattern> patterns;
+	
+	void flipPattern(LinePattern & pattern, int flip) const;
+	
+	void updateTiles(std::set<int3> & invalidated);
+	
+	ValidationResult validateTile(const LinePattern & pattern, const int3 & pos);
+	
+	CTerrainSelection terrainSel;
+	T lineType;
+	vstd::RNG * gen;
+	std::map<T, CTerrainSelection> formerState;
+
+private:
+	void drawLines(CTerrainSelection selection, T type);
+};
+
+class CDrawRoadsOperation : public CDrawLinesOperation<RoadId>
+{
+public:
+	CDrawRoadsOperation(CMap * map, const CTerrainSelection & terrainSel, RoadId roadType, vstd::RNG * gen);
+	std::string getLabel() const override;
+	
+protected:
+	void executeTile(TerrainTile & tile, RoadId type) override;
+	bool canApplyPattern(const LinePattern & pattern) const override;
+	bool needUpdateTile(const TerrainTile & tile) const override;
+	bool tileHasSomething(const int3 & pos) const override;
+	void updateTile(TerrainTile & tile, const LinePattern & pattern, const int flip) override;
+	RoadId getIdentifier(TerrainTile & tile) const override;
+	
+private:
+	RoadId roadType;
+};
+
+class CDrawRiversOperation : public CDrawLinesOperation<RiverId>
+{
+public:
+	CDrawRiversOperation(CMap * map, const CTerrainSelection & terrainSel, RiverId roadType, vstd::RNG * gen);
+	std::string getLabel() const override;
+	
+protected:
+	void executeTile(TerrainTile & tile, RiverId type) override;
+	bool canApplyPattern(const LinePattern & pattern) const override;
+	bool needUpdateTile(const TerrainTile & tile) const override;
+	bool tileHasSomething(const int3 & pos) const override;
+	void updateTile(TerrainTile & tile, const LinePattern & pattern, const int flip) override;
+	RiverId getIdentifier(TerrainTile & tile) const override;
+	
+private:
+	RiverId riverType;
+};
+
+VCMI_LIB_NAMESPACE_END

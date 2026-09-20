@@ -1,0 +1,107 @@
+
+{
+	//Commander receives these bonuses on level-up
+	"bonusPerLevel":
+	[
+		{ "type" : "CREATURE_DAMAGE", "val" : 2, "subtype" : "creatureDamageMin" }, //+2 minimum damage
+		{ "type" : "CREATURE_DAMAGE", "val" : 4, "subtype" : "creatureDamageMax" }, //+4 maximum damage
+		{ "type" : "STACK_HEALTH", "val" : 20 } //+20 hp
+	],
+	//Value of bonuses given by each skill level
+	"skillLevels":
+	[
+		{"name": "ATTACK", "levels": [2, 5, 9, 15, 25]}, //0
+		{"name": "DEFENSE", "levels": [4, 10, 18, 30, 50]}, //1
+		{"name": "HEALTH", "levels": [10, 25, 45, 70, 100]}, //2
+		{"name": "DAMAGE", "levels": [10, 25, 45, 70, 100]}, //3
+		{"name": "SPEED", "levels": [1, 2, 3, 4, 6]}, //4
+		{"name": "SPELL_POWER", "levels": [1, 3, 6, 14, 29]}, //5
+		{"name": "CASTS", "levels": [1, 2, 3, 4, 5]},
+		{"name": "RESISTANCE", "levels": [5, 15, 35, 60, 90]}
+	],
+	"abilityRequirements":
+	//Two secondary skills needed for each special ability
+	[
+		{
+			"ability": [{ "type" : "ENEMY_DEFENCE_REDUCTION", "val": 50 }],
+			"skills": [0, 1]
+		},
+		{
+			"ability": [ 
+				{
+					"type" :"FEARFUL",
+					"val" : 10,
+					"propagator": "BATTLE_WIDE",
+					"propagationUpdater" : "BONUS_OWNER_UPDATER",
+					"description" : "PLACEHOLDER",
+					"limiters" : [ 
+						"OPPOSITE_SIDE", 
+						{
+							"type" : "HAS_ANOTHER_BONUS_LIMITER",
+							"bonusType" : "LIVING"
+						}
+					] 
+				}
+			], 
+			"skills": [0, 2]
+		},
+		{
+			"ability": [{ "type" : "ALWAYS_MAXIMUM_DAMAGE", "val": 0 }],
+			"skills": [0, 3]
+		},
+		{
+			"ability": [
+				{ "type" : "SHOOTER", "val": 0 },
+				{ "type" : "NO_MELEE_PENALTY", "val": 0 }
+			],
+			"skills": [0, 4]
+		},
+		{
+			"ability": [{ "type" : "BLOCKS_RETALIATION", "val": 0 }],
+			"skills": [0,5]
+		},
+		{
+			"ability": [{ "type" : "UNLIMITED_RETALIATIONS", "val": 0 }],
+			"skills": [1, 2]
+		},
+		{
+			"ability": [{ "type" : "ATTACKS_ALL_ADJACENT", "val": 0 }],
+			"skills": [1, 3]
+		},
+		{
+			// TODO: Implement bonus that gives chance to completely block one enemy attack per turn
+			"ability": [{ "type" : "GENERAL_DAMAGE_REDUCTION", "val": 30, "subtype" : "damageTypeAll" }],
+			"skills": [1, 4]
+		}, 
+		{
+			"ability": [{ "type" : "FIRE_SHIELD", "val": 1 }],
+			"skills": [1, 5]
+		},
+		{
+			"ability": [{ "type" : "ADDITIONAL_ATTACK", "val": 1 }],
+			"skills": [2, 3]
+		},
+		{
+			"ability": [{ "type" : "HP_REGENERATION", "val": 50 }],
+			"skills": [2, 4]
+		},
+		{
+			"ability": [{ "type" : "SPELL_AFTER_ATTACK", "val": 30, "subtype" : "paralyze" }],
+			"skills": [2, 5]
+		},
+		{
+			"ability": [{ "type" : "JOUSTING", "val": 5 }],
+			"skills": [3, 4]
+		},
+		{
+			"ability": [{ "type" : "DEATH_STARE", "val": 1, "subtype" : "deathStareCommander" }],
+			"skills": [3,5]
+		},
+		{
+			"ability": [{ "type" : "FLYING", "val": 0, "subtype" : "movementFlying" }],
+			"skills": [4,5]
+		}
+	]
+	
+	
+}

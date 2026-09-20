@@ -1,0 +1,299 @@
+/*
+ * TurnTimerWidget.cpp, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+#include "StdInc.h"
+#include "TurnTimerWidget.h"
+
+#include "../CPlayerInterface.h"
+#include "../Client.h"
+#include "../CServerHandler.h"
+#include "../battle/BattleInterface.h"
+#include "../battle/BattleStacksController.h"
+#include "../GameEngine.h"
+#include "../GameInstance.h"
+#include "../media/ISoundPlayer.h"
+#include "../render/Graphics.h"
+#include "../render/IFont.h"
+#include "../render/IRenderHandler.h"
+#include "../widgets/Images.h"
+#include "../widgets/GraphicalPrimitiveCanvas.h"
+#include "../widgets/TextControls.h"
+
+#include "../../lib/CPlayerState.h"
+#include "../../lib/CStack.h"
+#include "../../lib/StartInfo.h"
+#include "../../lib/battle/BattleInfo.h"
+#include "../../lib/battle/CPlayerBattleCallback.h"
+#include "../../lib/callback/CCallback.h"
+#include "../../lib/gameState/CGameState.h"
+
+VerticalPercentBar::VerticalPercentBar(const Point & position, const Point & size, ColorRGBA barColor, ColorRGBA barColorBackground, ColorRGBA borderColor)
+	: percent(1.0f)
+	, barColor(barColor)
+	, barColorBackground(barColorBackground)
+	, borderColor(borderColor)
+{
+	OBJECT_CONSTRUCTION;
+
+	pos += position;
+	pos.w = size.x;
+	pos.h = size.y;
+
+	back = std::make_shared<TransparentFilledRectangle>(Rect(0, 0, pos.w, pos.h), barColorBackground, borderColor, 1);
+	setFillColor(barColor);
+}
+
+void VerticalPercentBar::setPercent(int newPercent)
+{
+	percent = std::clamp(newPercent, 0, 100);
+	fill->pos.h = ((pos.h - 2) * percent) / 100;
+	fill->moveTo(Point(pos.x + 1, pos.y + pos.h - fill->pos.h - 1));
+	redraw();
+}
+
+void VerticalPercentBar::setFillColor(ColorRGBA fillColor)
+{
+	OBJECT_CONSTRUCTION;
+	
+	fill = std::make_shared<TransparentFilledRectangle>(Rect(1, 1, pos.w - 2, pos.h - 2), fillColor, borderColor, 0);
+	redraw();
+}
+
+TurnTimerWidget::TurnTimerWidget(const Point & position)
+	: TurnTimerWidget(position, PlayerColor::NEUTRAL)
+{}
+
+TurnTimerWidget::TurnTimerWidget(const Point & position, PlayerColor player)
+	: CIntObject(TIME)
+	, lastSoundCheckSeconds(0)
+	, isBattleMode(player.isValidPlayer())
+{
+	OBJECT_CONSTRUCTION;
+
+	pos += position;
+	pos.w = 0;
+	pos.h = 0;
+	recActions &= ~DEACTIVATE;
+	const auto & timers = GAME->interface()->cb->getStartInfo()->turnTimerInfo;
+
+	backgroundTexture = std::make_shared<CFilledTexture>(ImagePath::builtin("DiBoxBck"), pos); // 1 px smaller on all sides
+	backgroundBorder = std::make_shared<TransparentFilledRectangle>(pos, ColorRGBA(0, 0, 0, 128), Colors::BRIGHT_YELLOW);
+
+	int bigFontHeight = ENGINE->renderHandler().loadFont(FONT_BIG)->getLineHeight();
+
+	pos.h += 6;
+	if (isBattleMode)
+	{
+		pos.w = 77;
+
+		pos.h += bigFontHeight - 4;
+		playerLabelsMain[player] = std::make_shared<CLabel>(pos.w / 2, pos.h - 2, FONT_BIG, ETextAlignment::BOTTOMCENTER, graphics->playerColors[player.getNum()], "");
+
+		if (timers.battleTimer != 0)
+		{
+			pos.h += bigFontHeight;
+			playerLabelsBattle[player] = std::make_shared<CLabel>(pos.w / 2, pos.h - 2, FONT_BIG, ETextAlignment::BOTTOMCENTER, graphics->playerColors[player.getNum()], "");
+		}
+
+		if (!timers.accumulatingUnitTimer && timers.unitTimer != 0)
+		{
+			pos.h += bigFontHeight;
+			playerLabelsUnit[player] = std::make_shared<CLabel>(pos.w / 2, pos.h - 2, FONT_BIG, ETextAlignment::BOTTOMCENTER, graphics->playerColors[player.getNum()], "");
+		}
+
+		updateTextLabel(player, GAME->interface()->cb->getPlayerTurnTime(player));
+	}
+	else
+	{
+		if (!timers.accumulatingTurnTimer && timers.baseTimer != 0)
+			pos.w = 142;
+		else
+			pos.w = 82;
+		
+		for(PlayerColor player(0); player < PlayerColor::PLAYER_LIMIT; ++player)
+		{
+			if (GAME->interface()->cb->getStartInfo()->playerInfos.count(player) == 0)
+				continue;
+
+			if (!GAME->interface()->cb->getStartInfo()->playerInfos.at(player).isControlledByHuman())
+				continue;
+
+			pos.h += bigFontHeight - 4;
+			playerLabelsMain[player] = std::make_shared<CLabel>(pos.w / 2, pos.h - 2, FONT_BIG, ETextAlignment::BOTTOMCENTER, graphics->playerColors[player.getNum()], "");
+			constexpr int barWidth = 6;
+			playerBarsMovement[player] = std::make_shared<VerticalPercentBar>(Point(0, pos.h - bigFontHeight + 2), Point(barWidth, bigFontHeight - 6), Colors::GREEN, ColorRGBA(50, 50, 50), Colors::BRIGHT_YELLOW);
+			playerBarsBattle[player] = std::make_shared<VerticalPercentBar>(Point(pos.w - barWidth, pos.h - bigFontHeight + 2), Point(barWidth, bigFontHeight - 6), Colors::RED, ColorRGBA(50, 50, 50), Colors::BRIGHT_YELLOW);
+
+			updateTextLabel(player, GAME->interface()->cb->getPlayerTurnTime(player));
+		}
+	}
+
+	backgroundTexture->pos = Rect::createAround(pos, -1);
+	backgroundBorder->pos = pos;
+}
+
+void TurnTimerWidget::show(Canvas & to)
+{
+	showAll(to);
+}
+
+void TurnTimerWidget::updateNotifications(PlayerColor player, int timeMs)
+{
+	if(player != GAME->interface()->playerID)
+		return;
+
+	int newTimeSeconds = timeMs / 1000;
+
+	if (newTimeSeconds != lastSoundCheckSeconds && notificationThresholds.count(newTimeSeconds))
+		ENGINE->sound().playSound(AudioPath::builtin("WE5"));
+
+	lastSoundCheckSeconds = newTimeSeconds;
+}
+
+static std::string msToString(int timeMs)
+{
+	int timeSeconds = timeMs / 1000;
+	std::ostringstream oss;
+	oss << timeSeconds / 60 << ":" << std::setw(2) << std::setfill('0') << timeSeconds % 60;
+	return oss.str();
+}
+
+void TurnTimerWidget::updateTextLabel(PlayerColor player, const TurnTimerInfo & timer)
+{
+	const auto & timerSettings = GAME->interface()->cb->getStartInfo()->turnTimerInfo;
+	auto mainLabel = playerLabelsMain[player];
+
+	if (isBattleMode)
+	{
+		mainLabel->setText(msToString(timer.baseTimer + timer.turnTimer));
+
+		if (timerSettings.battleTimer != 0)
+		{
+			auto battleLabel = playerLabelsBattle[player];
+			if (timer.battleTimer != 0)
+			{
+				if (timerSettings.accumulatingUnitTimer)
+					battleLabel->setText("+" + msToString(timer.battleTimer + timer.unitTimer));
+				else
+					battleLabel->setText("+" + msToString(timer.battleTimer));
+			}
+			else
+				battleLabel->setText("");
+		}
+
+		if (!timerSettings.accumulatingUnitTimer && timerSettings.unitTimer != 0)
+		{
+			auto unitLabel = playerLabelsUnit[player];
+			if (timer.unitTimer != 0)
+				unitLabel->setText("+" + msToString(timer.unitTimer));
+			else
+				unitLabel->setText("");
+		}
+	}
+	else
+	{
+		if (!timerSettings.accumulatingTurnTimer && timerSettings.baseTimer != 0)
+			mainLabel->setText(msToString(timer.baseTimer) + "+" + msToString(timer.turnTimer));
+		else
+			mainLabel->setText(msToString(timer.baseTimer + timer.turnTimer));
+		playerBarsMovement[player]->setPercent(timer.remainingMovementPointsPercent);
+
+		ColorRGBA barColor = Colors::TRANSPARENCY;
+		if (timer.isBattle)
+			barColor = Colors::RED;
+		else if (timer.isTurnStart)
+			barColor = Colors::WHITE;
+		else if (timer.isTurnEnded)
+			barColor = Colors::GREEN;
+		else if (!timer.isActive)
+			barColor = Colors::YELLOW;
+
+		playerBarsBattle[player]->setFillColor(barColor);
+		playerBarsBattle[player]->setPercent(barColor != Colors::TRANSPARENCY ? 1.0f : 0.0f);
+	}
+}
+
+void TurnTimerWidget::updateTimer(PlayerColor player, uint32_t msPassed)
+{
+	const auto & gamestateTimer = GAME->interface()->cb->getPlayerTurnTime(player);
+	if(gamestateTimer.isActive && gamestateTimer.isBattle == isBattleMode)
+		updateNotifications(player, gamestateTimer.valueMs());
+	else if(player == GAME->interface()->playerID)
+		lastSoundCheckSeconds = 0;
+	updateTextLabel(player, gamestateTimer);
+
+	if(!isBattleMode
+		&& GAME->interface()->cb->getMapHeader()->battleOnly
+		&& GAME->interface()->arenaDeploymentActive.load())
+	{
+		const int remainingSeconds = std::max(0, gamestateTimer.valueMs() / 1000);
+		const auto previous = arenaMonitorLastSeconds.find(player);
+		if(previous == arenaMonitorLastSeconds.end() || previous->second != remainingSeconds)
+		{
+			arenaMonitorLastSeconds[player] = remainingSeconds;
+			logGlobal->debug("[ARENA-MONITOR] deployment_timer_ui player=%s remaining_ms=%d", player.toString(), gamestateTimer.valueMs());
+		}
+	}
+}
+
+void TurnTimerWidget::tick(uint32_t msPassed)
+{
+	const bool arenaMap = GAME->interface()->cb->getMapHeader()->battleOnly;
+	const bool arenaDeploymentActive = !isBattleMode
+		&& arenaMap
+		&& GAME->interface()->arenaDeploymentActive.load();
+
+	// The adventure-map widget is Arena's deployment clock. Once deployment
+	// ends it must become completely dormant; combat owns a separate widget and
+	// separate battleTimer/unitTimer values.
+	if(!isBattleMode && arenaMap && !arenaDeploymentActive)
+	{
+		lastSoundCheckSeconds = 0;
+		return;
+	}
+
+	if(isBattleMode)
+	{
+		const auto battleInterface = GAME->interface()->battleInt;
+		if(!battleInterface || !GAME->server().client->gameState().getBattle(battleInterface->getBattleID()))
+		{
+			removeUsedEvents(TIME);
+			return;
+		}
+	}
+
+	for(const auto & player : playerLabelsMain)
+	{
+		if (GAME->interface()->battleInt && !arenaDeploymentActive)
+		{
+			const auto * battle = GAME->server().client->gameState().getBattle(GAME->interface()->battleInt->getBattleID());
+			if(!battle)
+			{
+				// BattleEnded removes the battle state shortly before the GUI thread
+				// releases battleInt. This is the persistent adventure-map timer, so
+				// disabling TIME in that short gap would also disable every later arena
+				// deployment countdown. The battle-mode timer is retired separately above.
+				return;
+			}
+
+			bool isDefender = battle->sideToPlayer(BattleSide::DEFENDER) == player.first;
+			bool isAttacker = battle->sideToPlayer(BattleSide::ATTACKER) == player.first;
+			bool isMakingUnitTurn = battle->battleActiveUnit() && battle->battleActiveUnit()->unitOwner() == player.first;
+			bool isEngagedInBattle = isDefender || isAttacker;
+
+			// Due to way our network message queue works during battle animation
+			// client actually does not receives updates from server as to which timer is active when game has battle animations playing
+			// so during battle skip updating timer unless game is waiting for player to select action
+			if (isEngagedInBattle && !isMakingUnitTurn)
+				continue;
+		}
+
+		updateTimer(player.first, msPassed);
+	}
+}

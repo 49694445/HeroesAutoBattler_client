@@ -1,0 +1,123 @@
+--- a/onnxruntime/test/shared_lib/test_model_loading.cc
++++ b/onnxruntime/test/shared_lib/test_model_loading.cc
+@@ -227,7 +227,7 @@ using ScopedFileDescriptor = ScopedResource<FileDescriptorTraits>;
+ 
+ void FileMmap(const ORTCHAR_T* file_path, void*& mapped_base) {
+ #ifdef _WIN32
+-  wil::unique_hfile file_handle{CreateFile2(file_path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL)};
++  wil::unique_hfile file_handle{CreateFileW(file_path, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)};
+   ASSERT_TRUE(file_handle.get() != INVALID_HANDLE_VALUE);
+ 
+   wil::unique_hfile file_mapping_handle{
+--- a/onnxruntime/core/platform/windows/env.cc
++++ b/onnxruntime/core/platform/windows/env.cc
+@@ -314,7 +314,7 @@ PIDType WindowsEnv::GetSelfPid() const {
+ 
+ Status WindowsEnv::GetFileLength(_In_z_ const ORTCHAR_T* file_path, size_t& length) const {
+   wil::unique_hfile file_handle{
+-      CreateFile2(file_path, FILE_READ_ATTRIBUTES, FILE_SHARE_READ, OPEN_EXISTING, NULL)};
++      CreateFileW(file_path, FILE_READ_ATTRIBUTES, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)};
+   if (file_handle.get() == INVALID_HANDLE_VALUE) {
+     const auto error_code = GetLastError();
+     return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "open file ", ToUTF8String(Basename(file_path)), " fail, errcode = ", error_code, " - ", std::system_category().message(error_code));
+@@ -361,7 +361,7 @@ Status WindowsEnv::ReadFileIntoBuffer(_In_z_ const ORTCHAR_T* const file_path, c
+   ORT_RETURN_IF_NOT(offset >= 0, "offset < 0");
+   ORT_RETURN_IF_NOT(length <= buffer.size(), "length > buffer.size()");
+   wil::unique_hfile file_handle{
+-      CreateFile2(file_path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL)};
++      CreateFileW(file_path, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)};
+   if (file_handle.get() == INVALID_HANDLE_VALUE) {
+     const auto error_code = GetLastError();
+     return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL, "open file ", ToUTF8String(Basename(file_path)), " fail, errcode = ", error_code, " - ", std::system_category().message(error_code));
+@@ -414,7 +414,7 @@ Status WindowsEnv::MapFileIntoMemory(_In_z_ const ORTCHAR_T* file_path,
+   }
+ 
+   wil::unique_hfile file_handle{
+-      CreateFile2(file_path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL)};
++      CreateFileW(file_path, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr)};
+   if (file_handle.get() == INVALID_HANDLE_VALUE) {
+     const auto error_code = GetLastError();
+     return ORT_MAKE_STATUS(ONNXRUNTIME, FAIL,
+@@ -600,16 +600,14 @@ common::Status WindowsEnv::GetCanonicalPath(
+     PathString& canonical_path) const {
+   // adapted from MSVC STL std::filesystem::canonical() implementation
+   // https://github.com/microsoft/STL/blob/ed3cbf36416a385828e7a5987ca52cb42882d84b/stl/inc/filesystem#L2986
+-  CREATEFILE2_EXTENDED_PARAMETERS param;
+-  memset(&param, 0, sizeof(param));
+-  param.dwSize = sizeof(CREATEFILE2_EXTENDED_PARAMETERS);
+-  param.dwFileFlags = FILE_FLAG_BACKUP_SEMANTICS;
+-  wil::unique_hfile file_handle{CreateFile2(
+-      path.c_str(),
+-      FILE_READ_ATTRIBUTES,
+-      FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
+-      OPEN_EXISTING,
+-      &param)};
++  wil::unique_hfile file_handle{CreateFileW(
++      path.c_str(),                                              // LPCWSTR lpFileName
++      FILE_READ_ATTRIBUTES,                                      // DWORD dwDesiredAccess
++      FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,    // DWORD dwShareMode
++      nullptr,                                                   // LPSECURITY_ATTRIBUTES lpSecurityAttributes
++      OPEN_EXISTING,                                             // DWORD dwCreationDisposition
++      FILE_FLAG_BACKUP_SEMANTICS,                                // DWORD dwFlagsAndAttributes
++      nullptr)};                                                 // HANDLE hTemplateFile
+ 
+   if (file_handle.get() == INVALID_HANDLE_VALUE) {
+     const auto error_code = GetLastError();
+--- a/onnxruntime/core/platform/windows/env_time.cc
++++ b/onnxruntime/core/platform/windows/env_time.cc
+@@ -18,6 +18,7 @@ limitations under the License.
+ 
+ #include <time.h>
+ #include <windows.h>
++#include <sysinfoapi.h>
+ #include <chrono>
+ #include <numeric>
+ #include <algorithm>
+@@ -28,14 +29,10 @@ namespace {
+ 
+ class WindowsEnvTime : public EnvTime {
+  public:
+-  WindowsEnvTime() : GetSystemTimePreciseAsFileTime_(GetSystemTimePreciseAsFileTime) {}
++  WindowsEnvTime() = default;
+ 
+   uint64_t NowMicros() override {
+-    if (GetSystemTimePreciseAsFileTime_ != NULL) {
+-      // GetSystemTimePreciseAsFileTime function is only available in latest
+-      // versions of Windows, so we need to check for its existence here.
+-      // All std::chrono clocks on Windows proved to return
+-      // values that may repeat, which is not good enough for some uses.
++    // System time in 100-ns ticks since 1601-01-01
+       constexpr int64_t kUnixEpochStartTicks = 116444736000000000i64;
+       constexpr int64_t kFtToMicroSec = 10;
+ 
+@@ -43,7 +40,8 @@ class WindowsEnvTime : public EnvTime {
+       // just any microseconds because it is often used as an argument
+       // to TimedWait() on condition variable
+       FILETIME system_time;
+-      GetSystemTimePreciseAsFileTime_(&system_time);
++      // Get current system time as FILETIME (available on all supported Windows versions)
++      GetSystemTimeAsFileTime(&system_time);
+ 
+       LARGE_INTEGER li;
+       li.LowPart = system_time.dwLowDateTime;
+@@ -54,16 +52,11 @@ class WindowsEnvTime : public EnvTime {
+       li.QuadPart /= kFtToMicroSec;
+       return li.QuadPart;
+     }
+-    using namespace std::chrono;
+-    return duration_cast<microseconds>(system_clock::now().time_since_epoch())
+-        .count();
+-  }
+-
+-  void SleepForMicroseconds(int64_t micros) { Sleep(static_cast<DWORD>(micros) / 1000); }
+ 
+- private:
+-  typedef VOID(WINAPI* FnGetSystemTimePreciseAsFileTime)(LPFILETIME);
+-  FnGetSystemTimePreciseAsFileTime GetSystemTimePreciseAsFileTime_;
++  void SleepForMicroseconds(int64_t micros) {
++    DWORD ms = static_cast<DWORD>((micros + 999) / 1000);
++    Sleep(ms);
++  }
+ };
+ 
+ }  // namespace

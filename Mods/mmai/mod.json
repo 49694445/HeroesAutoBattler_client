@@ -1,0 +1,33 @@
+{
+    "name": "MMAI",
+    "description": "<p>MMAI is a combat AI powered by machine learning.</p><p>To use MMAI, make sure to select it in Settings (see Screenshots tab).</p><p><i>You can read more about this project <a href='https://smanolloff.github.io/projects/vcmi-gym'>here</a>.</i></p>",
+    "author": "Simeon Manolov <s.manolloff@gmail.com>",
+    "contact": "https://smanolloff.github.io/projects/vcmi-gym",
+    "version": "1.5",
+    "modType": "AI",
+    "changelog": {
+        "1.0": ["Initial release"],
+        "1.1": ["Add comment regarding temperature in mmai-settings.json"],
+        "1.2": [
+            "Fixed issue on crowded battlefields (30+ units)",
+            "Improved model inference speed via dynamic inputs"
+        ],
+        "1.3": ["Re-enabled temperature parameter in mmai-settings.json."],
+        "1.4": ["Updated models which should now kite less vs. shooters."],
+        "1.5": ["Reverded defender model to due to regression in siege combat"]
+    },
+    "compatibility": {
+        "min": "1.7.0",
+        "max": "1.7.9"
+    },
+    "licenseName": "Apache License, Version 2.0",
+    "licenseURL": "http://www.apache.org/licenses/LICENSE-2.0",
+    "filesystem": {
+        "MMAI/CONFIG/": [{"path": "/config","type": "dir"}],
+        "MMAI/MODELS/": [{"path": "/models","type": "dir"}]
+    },
+    "czech" : {
+        "name": "MMAI",
+        "description": "<p>MMAI je bitevní umělá inteligence využívající strojové učení.</p><p>Chcete-li MMAI používat, ujistěte se, že je vybrána v Nastavení Launcheru pod položkou Umělá inteligence - Neutrální AI v bitvách / AI automatického boje v bitvách / Nepřátelská AI v bitvách.</p><p><i>Více o tomto projektu si můžete přečíst <a href='https://smanolloff.github.io/projects/vcmi-gym'>zde</a>.</i></p>"
+    }
+}

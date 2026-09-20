@@ -1,0 +1,5 @@
+[replace_requires]
+bzip2/*: bzip2/[*]@system
+libiconv/*: libiconv/[*]@system
+sqlite3/*: sqlite3/[*]@system
+zlib/*: zlib/[*]@system

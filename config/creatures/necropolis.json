@@ -1,0 +1,549 @@
+{
+	"skeleton" :
+	{
+		"index": 56,
+		"level": 1,
+		"faction": "necropolis",
+		"upgrades": ["skeletonWarrior"],
+		"abilities" :
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:112",
+			"mapAttackFromLeft": "AvWattak.def:0:113",
+			"animation": "CSKELE.DEF"
+		},
+		"sound" :
+		{
+			"attack": "SKELATTK.wav",
+			"defend": "SKELDFND.wav",
+			"killed": "SKELKILL.wav",
+			"move": "SKELMOVE.wav",
+			"wince": "SKELWNCE.wav"
+		}
+	},
+	"skeletonWarrior" :
+	{
+		"index": 57,
+		"level": 1,
+		"faction": "necropolis",
+		"abilities" :
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:114",
+			"mapAttackFromLeft": "AvWattak.def:0:115",
+			"animation": "CWSKEL.DEF"
+		},
+		"sound" :
+		{
+			"attack": "SKLWATTK.wav",
+			"defend": "SKLWDFND.wav",
+			"killed": "SKLWKILL.wav",
+			"move": "SKLWMOVE.wav",
+			"wince": "SKLWWNCE.wav"
+		}
+	},
+	"walkingDead" :
+	{
+		"index": 58,
+		"level": 2,
+		"compatibilityIdentifiers": [ "zombie" ], //FIXME: zombie is a name of upgrade but not in HOTRAITS
+		"faction" : "necropolis",
+		"upgrades": ["zombieLord"],
+		"abilities" :
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:116",
+			"mapAttackFromLeft": "AvWattak.def:0:117",
+			"animation": "CZOMBI.DEF"
+		},
+		"sound" :
+		{
+			"attack": "ZOMBATTK.wav",
+			"defend": "ZOMBDFND.wav",
+			"killed": "ZOMBKILL.wav",
+			"move": "ZOMBMOVE.wav",
+			"wince": "ZOMBWNCE.wav"
+		}
+	},
+	"zombieLord" : //FIXME: zombie is a correct in-name but not in HOTRAITS.TXT
+	{
+		"index": 59,
+		"level": 2,
+		"faction": "necropolis",
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:118",
+			"mapAttackFromLeft": "AvWattak.def:0:119",
+			"animation": "CZOMLO.DEF"
+		},
+		"sound" :
+		{
+			"attack": "ZMBLATTK.wav",
+			"defend": "ZMBLDFND.wav",
+			"killed": "ZMBLKILL.wav",
+			"move": "ZMBLMOVE.wav",
+			"wince": "ZMBLWNCE.wav"
+		},
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"castDisease" : 
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.disease",
+				"val" : 20
+			}
+		}
+	},
+	"wight" :
+	{
+		"index": 60,
+		"level": 3,
+		"faction": "necropolis",
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"regenerate" : 
+			{
+				"type" : "HP_REGENERATION",
+				"val" : 50
+			}
+		},
+		"upgrades": ["wraith"],
+		"hasDoubleWeek": true,
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:120",
+			"mapAttackFromLeft": "AvWattak.def:0:121",
+			"animation": "CWIGHT.DEF"
+		},
+		"sound" :
+		{
+			"attack": "WGHTATTK.wav",
+			"defend": "WGHTDFND.wav",
+			"killed": "WGHTKILL.wav",
+			"move": "WGHTMOVE.wav",
+			"wince": "WGHTWNCE.wav"
+		}
+	},
+	"wraith" :
+	{
+		"index": 61,
+		"level": 3,
+		"faction": "necropolis",
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"regenerate" : 
+			{
+				"type" : "HP_REGENERATION",
+				"val" : 50
+			},
+			"drainsMana" :
+			{
+				"type" : "MANA_DRAIN",
+				"val" : 2
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:122",
+			"mapAttackFromLeft": "AvWattak.def:0:123",
+			"animation": "CWRAIT.DEF"
+		},
+		"sound" :
+		{
+			"attack": "WRTHATTK.wav",
+			"defend": "WRTHDFND.wav",
+			"killed": "WRTHKILL.wav",
+			"move": "WRTHMOVE.wav",
+			"wince": "WRTHWNCE.wav"
+		}
+	},
+	"vampire" :
+	{
+		"index": 62,
+		"level": 4,
+		"faction": "necropolis",
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"noRetalitation" : 
+			{
+				"type" : "BLOCKS_RETALIATION"
+			}
+		},
+		"upgrades": ["vampireLord"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:124",
+			"mapAttackFromLeft": "AvWattak.def:0:125",
+			"animation": "CVAMP.DEF"
+		},
+		"sound" :
+		{
+			"attack": "VAMPATTK.wav",
+			"defend": "VAMPDFND.wav",
+			"killed": "VAMPKILL.wav",
+			"move": "VAMPMOVE.wav",
+			"wince": "VAMPWNCE.wav",
+			"startMoving": "VAMPEXT1.wav",
+			"endMoving": "VAMPEXT2.wav"
+		}
+	},
+	"vampireLord" :
+	{
+		"index": 63,
+		"level": 4,
+		"faction": "necropolis",
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"noRetalitation" : 
+			{
+				"type" : "BLOCKS_RETALIATION"
+			},
+			"drainsLife" :
+			{
+				"type" : "LIFE_DRAIN",
+				"val" : 100
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:126",
+			"mapAttackFromLeft": "AvWattak.def:0:127",
+			"animation": "CNOSFE.DEF"
+		},
+		"sound" :
+		{
+			"attack": "NOSFATTK.wav",
+			"defend": "NOSFDFND.wav",
+			"killed": "NOSFKILL.wav",
+			"move": "NOSFMOVE.wav",
+			"shoot": "NOSFSHOT.wav",
+			"wince": "NOSFWNCE.wav",
+			"startMoving": "NOSFEXT1.wav",
+			"endMoving": "NOSFEXT2.wav"
+		}
+	},
+	"lich" :
+	{
+		"index": 64,
+		"level": 5,
+		"faction": "necropolis",
+		"shots" : 12,
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"deathCloud" :
+			{
+				"type" : "SPELL_LIKE_ATTACK",
+				"subtype" : "spell.deathCloud"
+			}
+		},
+		"upgrades": ["powerLich"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:128",
+			"mapAttackFromLeft": "AvWattak.def:0:129",
+			"animation": "CLICH.DEF",
+			"missile" :
+			{
+				"projectile": "PLICH.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "LICHATTK.wav",
+			"defend": "LICHDFND.wav",
+			"killed": "LICHKILL.wav",
+			"move": "LICHMOVE.wav",
+			"shoot": "LICHSHOT.wav",
+			"wince": "LICHWNCE.wav"
+		}
+	},
+	"powerLich" :
+	{
+		"index": 65,
+		"level": 5,
+		"faction": "necropolis",
+		"shots" : 24,
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"shooter" :
+			{
+				"type" : "SHOOTER"
+			},
+			"deathCloud" :
+			{
+				"type" : "SPELL_LIKE_ATTACK",
+				"subtype" : "spell.deathCloud"
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:130",
+			"mapAttackFromLeft": "AvWattak.def:0:131",
+			"animation": "CPLICH.DEF",
+			"missile" :
+			{
+				"projectile": "PLICH.DEF"
+			}
+		},
+		"sound" :
+		{
+			"attack": "PLCHATTK.wav",
+			"defend": "PLCHDFND.wav",
+			"killed": "PLCHKILL.wav",
+			"move": "PLCHMOVE.wav",
+			"shoot": "PLCHSHOT.wav",
+			"wince": "PLCHWNCE.wav"
+		}
+	},
+	"blackKnight" :
+	{
+		"index": 66,
+		"level": 6,
+		"faction": "necropolis",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"curses" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.curse",
+				"val" : 20,
+				"addInfo" : [2,0]
+			}
+		},
+		"upgrades": ["dreadKnight"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:132",
+			"mapAttackFromLeft": "AvWattak.def:0:133",
+			"animation": "CBKNIG.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BKNTATTK.wav",
+			"defend": "BKNTDFND.wav",
+			"killed": "BKNTKILL.wav",
+			"move": "BKNTMOVE.wav",
+			"wince": "BKNTWNCE.wav"
+		}
+	},
+	"dreadKnight" :
+	{
+		"index": 67,
+		"level": 6,
+		"faction": "necropolis",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"curses" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.curse",
+				"val" : 20,
+				"addInfo" : [2,0]
+			},
+			"deathStrike" :
+			{
+				"type" : "DOUBLE_DAMAGE_CHANCE",
+				"val" : 20
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:134",
+			"mapAttackFromLeft": "AvWattak.def:0:135",
+			"animation": "CBLORD.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BLRDATTK.wav",
+			"defend": "BLRDDFND.wav",
+			"killed": "BLRDKILL.wav",
+			"move": "BLRDMOVE.wav",
+			"wince": "BLRDWNCE.wav"
+		}
+	},
+	"boneDragon" :
+	{
+		"index": 68,
+		"level": 7,
+		"faction": "necropolis",
+		"doubleWide" : true,
+		"abilities" :
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"dragon" :
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"decreaseMorale" :
+			{
+				"type" : "MORALE",
+				"val" : -1,
+				"stacking" : "Undead Dragons",
+				"propagator": "BATTLE_WIDE",
+				"propagationUpdater" : "BONUS_OWNER_UPDATER",
+				"description" : "PLACEHOLDER",
+				"limiters" : [ "OPPOSITE_SIDE" ]
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			}
+		},
+		"upgrades": ["ghostDragon"],
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:136",
+			"mapAttackFromLeft": "AvWattak.def:0:137",
+			"animation": "CNDRGN.DEF"
+		},
+		"sound" :
+		{
+			"attack": "BODRATTK.wav",
+			"defend": "BODRDFND.wav",
+			"killed": "BODRKILL.wav",
+			"move": "BODRMOVE.wav",
+			"wince": "BODRWNCE.wav"
+		}
+	},
+	"ghostDragon" :
+	{
+		"index": 69,
+		"level": 7,
+		"faction": "necropolis",
+		"doubleWide" : true,
+		"abilities":
+		{
+			"undead" :
+			{
+				"type" : "UNDEAD"
+			},
+			"dragon" :
+			{
+				"type" : "DRAGON_NATURE"
+			},
+			"canFly" :
+			{
+				"type" : "FLYING"
+			},
+			"age" :
+			{
+				"type" : "SPELL_AFTER_ATTACK",
+				"subtype" : "spell.age",
+				"val" : 20
+			},
+			"decreaseMorale" :
+			{
+				"type" : "MORALE",
+				"val" : -1,
+				"stacking" : "Undead Dragons",
+				"propagator": "BATTLE_WIDE",
+				"propagationUpdater" : "BONUS_OWNER_UPDATER",
+				"description" : "@creatures.core.boneDragon.bonus.decreaseMorale",
+				"limiters" : [ "OPPOSITE_SIDE" ]
+			},
+			"KING_1" : // Will be affected by Slayer with no expertise
+			{
+				"type" : "KING",
+				"val" : 0
+			}
+		},
+		"graphics" :
+		{
+			"mapAttackFromRight": "AvWattak.def:0:138",
+			"mapAttackFromLeft": "AvWattak.def:0:139",
+			"animation": "CHDRGN.DEF"
+		},
+		"sound" :
+		{
+			"attack": "GHDRATTK.wav",
+			"defend": "GHDRDFND.wav",
+			"killed": "GHDRKILL.wav",
+			"move": "GHDRMOVE.wav",
+			"wince": "GHDRWNCE.wav"
+		}
+	}
+}

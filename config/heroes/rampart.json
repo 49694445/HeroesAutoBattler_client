@@ -1,0 +1,264 @@
+{
+	"mephala":
+	{
+		"index": 16,
+		"class" : "ranger",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "leadership", "level": "basic" },
+			{ "skill" : "armorer", "level": "basic" }
+		],
+		"specialty" : {
+			"secondary" : "armorer"
+		}
+	},
+	"ufretin":
+	{
+		"index": 17,
+		"class" : "ranger",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "luck", "level": "basic" },
+			{ "skill" : "resistance", "level": "basic" }
+		],
+		"specialty" : {
+			"creature" : "dwarf"
+		}
+	},
+	"jenova":
+	{
+		"index": 18,
+		"class" : "ranger",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "archery", "level": "advanced" }
+		],
+		"specialty" : {
+			"bonuses" : {
+				"gold" : {
+					"subtype" : "resource.gold",
+					"type" : "GENERATE_RESOURCE",
+					"val" : 350
+				}
+			}
+		}
+	},
+	"ryland":
+	{
+		"index": 19,
+		"class" : "ranger",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "diplomacy", "level": "basic" },
+			{ "skill" : "leadership", "level": "basic" }
+		],
+		"specialty" : {
+			"creature" : "dendroidGuard"
+		}
+	},
+	"thorgrim":
+	{
+		"index": 20,
+		"class" : "ranger",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "resistance", "level": "advanced" }
+		],
+		"specialty" : {
+			"secondary" : "resistance"
+		}
+	},
+	"ivor":
+	{
+		"index": 21,
+		"class" : "ranger",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "archery", "level": "basic" },
+			{ "skill" : "offence", "level": "basic" }
+		],
+		"specialty" : {
+			"creature" : "woodElf"
+		}
+	},
+	"clancy":
+	{
+		"index": 22,
+		"class" : "ranger",
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "pathfinding", "level": "basic" },
+			{ "skill" : "resistance", "level": "basic" }
+		],
+		"specialty" : {
+			"creature" : "unicorn"
+		}
+	},
+	"kyrre":
+	{
+		"index": 23,
+		"class" : "ranger",
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "archery", "level": "basic" },
+			{ "skill" : "logistics", "level": "basic" }
+		],
+		"specialty" : {
+			"secondary" : "logistics"
+		}
+	},
+	"coronius":
+	{
+		"index": 24,
+		"class" : "druid",
+		"spellbook": [ "slayer" ],
+		"female": false,
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "scholar", "level": "basic" }
+		],
+		"specialty" : {
+			"bonuses" : {
+				"slayer" : {
+					"addInfo" : 1,
+					"subtype" : "spell.slayer",
+					"type" : "SPECIAL_PECULIAR_ENCHANT"
+				}
+			}
+		}
+	},
+	"uland":
+	{
+		"index": 25,
+		"class" : "druid",
+		"female": false,
+		"spellbook": [ "cure" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "advanced" },
+			{ "skill" : "ballistics", "level": "basic" }
+		],
+		"specialty" : {
+			"bonuses" : {
+				"cure" : {
+					"subtype" : "spell.cure",
+					"type" : "SPECIAL_SPELL_LEV",
+					"updater" : "TIMES_HERO_LEVEL",
+					"val" : 3
+				}
+			}
+		}
+	},
+	"elleshar":
+	{
+		"index": 26,
+		"class" : "druid",
+		"female": false,
+		"spellbook": [ "curse" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "intelligence", "level": "basic" }
+		],
+		"specialty" : {
+			"secondary" : "intelligence"
+		}
+	},
+	"gem":
+	{
+		"index": 27,
+		"class" : "druid",
+		"female": true,
+		"spellbook": [ "summonBoat" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "firstAid", "level": "basic" }
+		],
+		"specialty" : {
+			"secondary" : "firstAid"
+		}
+	},
+	"malcom":
+	{
+		"index": 28,
+		"class" : "druid",
+		"female": false,
+		"spellbook": [ "magicArrow" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "eagleEye", "level": "basic" }
+		],
+		"specialty" : {
+			"secondary" : "eagleEye"
+		}
+	},
+	"melodia":
+	{
+		"index": 29,
+		"class" : "druid",
+		"spellbook": [ "fortune" ],
+		"female": true,
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "luck", "level": "basic" }
+		],
+		"specialty" : {
+			"bonuses" : {
+				"fortune" : {
+					"addInfo" : 3,
+					"subtype" : "spell.fortune",
+					"type" : "SPECIAL_FIXED_VALUE_ENCHANT"
+				}
+			}
+		}
+	},
+	"alagar":
+	{
+		"index": 30,
+		"class" : "druid",
+		"female": false,
+		"spellbook": [ "iceBolt" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "sorcery", "level": "basic" }
+		],
+		"specialty" : {
+			"bonuses" : {
+				"iceBolt" : {
+					"subtype" : "spell.iceBolt",
+					"type" : "SPECIAL_SPELL_LEV",
+					"updater" : "TIMES_HERO_LEVEL",
+					"val" : 3
+				}
+			}
+		}
+	},
+	"aeris":
+	{
+		"index": 31,
+		"class" : "druid",
+		"female": false,
+		"spellbook": [ "protectAir" ],
+		"skills":
+		[
+			{ "skill" : "wisdom", "level": "basic" },
+			{ "skill" : "scouting", "level": "basic" }
+		],
+		"specialty" : {
+			"creature" : "pegasus"
+		}
+	}
+}

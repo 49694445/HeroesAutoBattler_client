@@ -1,0 +1,252 @@
+{
+	"core:adela" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:waterMagic", "level" : "basic" }
+		]
+	},
+	"core:aeris" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:aine" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:intelligence", "level" : "basic" }
+		]
+	},
+	"core:ajit" : {
+		"skills" : [
+			{ "skill" : "core:leadership", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:alamar" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:intelligence", "level" : "basic" }
+		]
+	},
+	"core:broghild" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:bron" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:calh" : {
+		"skills" : [
+			{ "skill" : "core:archery", "level" : "basic" },
+			{ "skill" : "core:tactics", "level" : "basic" }
+		]
+	},
+	"core:clancy" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:coronius" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:fireMagic", "level" : "basic" }
+		]
+	},
+	"core:cyra" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:airMagic", "level" : "basic" }
+		]
+	},
+	"core:deemer" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:earthMagic", "level" : "basic" }
+		]
+	},
+	"core:fafner" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:fiona" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "advanced" }
+		]
+	},
+	"core:gretchin" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:tactics", "level" : "basic" }
+		]
+	},
+	"core:ignatius" : {
+		"skills" : [
+			{ "skill" : "core:tactics", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:iona" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:intelligence", "level" : "basic" }
+		]
+	},
+	"core:korbac" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:krellion" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:lorelei" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:leadership", "level" : "basic" }
+		]
+	},
+	"core:monere" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:neela" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:armorer", "level" : "basic" }
+		]
+	},
+	"core:octavia" : {
+		"skills" : [
+			{ "skill" : "core:estates", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:piquedram" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:mysticism", "level" : "basic" }
+		]
+	},
+	"core:pyre" : {
+		"skills" : [
+			{ "skill" : "core:artillery", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:rashka" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"core:ryland" : {
+		"skills" : [
+			{ "skill" : "core:armorer", "level" : "basic" },
+			{ "skill" : "core:leadership", "level" : "basic" }
+		]
+	},
+	"core:saurug" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:septienna" : {
+		"skills" : [
+			{ "skill" : "core:necromancy", "level" : "basic" },
+			{ "skill" : "core:sorcery", "level" : "basic" }
+		]
+	},
+	"core:shiva" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:armorer", "level" : "basic" }
+		]
+	},
+	"core:straker" : {
+		"skills" : [
+			{ "skill" : "core:necromancy", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:vokial" : {
+		"skills" : [
+			{ "skill" : "core:necromancy", "level" : "basic" },
+			{ "skill" : "core:armorer", "level" : "basic" }
+		]
+	},
+	"core:synca" : {
+		"skills" : [
+			{ "skill" : "core:leadership", "level" : "basic" },
+			{ "skill" : "core:mysticism", "level" : "basic" }
+		]
+	},
+	"core:thane" : {
+		"skills" : [
+			{ "skill" : "core:intelligence", "level" : "advanced" }
+		]
+	},
+	"core:ufretin" : {
+		"skills" : [
+			{ "skill" : "core:luck", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"core:xyron" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:mysticism", "level" : "basic" }
+		]
+	},
+	"hota.cove:01corkes" : {
+		"skills" : [
+			{ "skill" : "core:offence", "level" : "basic" },
+			{ "skill" : "core:armorer", "level" : "basic" }
+		]
+	},
+	"hota.cove:06leena" : {
+		"skills" : [
+			{ "skill" : "core:estates", "level" : "basic" },
+			{ "skill" : "core:offence", "level" : "basic" }
+		]
+	},
+	"hota.cove:15andal" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:estates", "level" : "basic" }
+		]
+	},
+	"hota.cove:17zilare" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:resistance", "level" : "basic" }
+		]
+	},
+	"hota.factory:11celestine" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:airMagic", "level" : "basic" }
+		]
+	},
+	"hota.factory:14bertram" : {
+		"skills" : [
+			{ "skill" : "core:wisdom", "level" : "basic" },
+			{ "skill" : "core:estates", "level" : "basic" }
+		]
+	}
+}

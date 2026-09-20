@@ -1,0 +1,21 @@
+{% import 'windows.jinja' as windows %}
+
+include(msvc)
+
+[settings]
+# https://blog.knatten.org/2022/08/26/microsoft-c-versions-explained/
+# https://learn.microsoft.com/en-us/cpp/overview/compiler-versions
+# v142 / 14.29 / 19.29
+compiler.version=192
+compiler.update=9
+
+[conf]
+# VS 2022
+tools.microsoft.msbuild:vs_version=17
+
+{% set _WIN32_WINNT_WIN7 = '0x0601' %}
+{% set NTDDI_WIN7 = '0x06010000' %}
+{{ windows.set_defines(
+    _WIN32_WINNT_WIN7,
+    NTDDI_WIN7,
+) }}

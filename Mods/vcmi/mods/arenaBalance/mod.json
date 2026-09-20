@@ -1,0 +1,31 @@
+{
+	"name": "Arena balance",
+	"description": "Arena-specific overrides for heroes, skills, and periodic town buildings.",
+	"version": "1.0",
+	"author": "VCMI Arena",
+	"modType": "Mechanics",
+	"softDepends": [
+		"chinese-translation",
+		"hota.gamebalance.factions",
+		"hota.gamebalance.heroes",
+		"hota.gamebalance.skills.intelligence",
+		"hota.gamebalance.skills.mysticism",
+		"hota.cove",
+		"hota.gamebalance.artifacts.bannedartifacts"
+	],
+	"skills": [
+		"config/arenaBalance/skills"
+	],
+	"heroes": [
+		"config/arenaBalance/heroes"
+	],
+	"factions": [
+		"config/arenaBalance/factions"
+	],
+	"translations": [
+		"config/arenaBalance/chinese"
+	],
+	"artifacts": [
+		"config/arenaBalance/artifacts"
+	]
+}

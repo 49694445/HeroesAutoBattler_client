@@ -1,0 +1,14 @@
+{
+	"core:dungeon" : {
+		"town" : {
+			"buildings" : {
+				"special2" : {
+					"description" : "The Mana Vortex doubles the spell points for one visiting hero, once every 4 days.",
+					"configuration" : {
+						"onVisitedMessage" : "The Mana Vortex has already been used during the current 4-day cycle."
+					}
+				}
+			}
+		}
+	}
+}

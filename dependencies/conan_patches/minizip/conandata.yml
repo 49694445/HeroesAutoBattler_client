@@ -1,0 +1,3 @@
+patches:
+  "1.3.1":
+    - patch_file: "patches/android-pre-24.diff"

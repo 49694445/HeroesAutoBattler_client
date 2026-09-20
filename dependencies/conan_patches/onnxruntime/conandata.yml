@@ -1,0 +1,13 @@
+patches:
+  "1.18.1":
+    - patch_file: "patches/android-64.diff"
+      patch_description: |
+        Fixes error for arm64-v8a targets:
+        onnxruntime/core/mlas/lib/mlasi.h:366:11: error: unknown type name 'bfloat16_t'
+    - patch_file: "patches/msvc-x86.diff"
+      patch_description: |
+        Fixes detection of x86 windows targets during cross-compilation.
+    - patch_file: "patches/win7.diff"
+      patch_description: |
+        Fixes compile errors on for windows 7 targets:
+        error C3861: 'CreateFile2': identifier not found

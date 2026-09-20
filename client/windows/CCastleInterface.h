@@ -1,0 +1,502 @@
+/*
+ * CCastleInterface.h, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+#pragma once
+
+#include "../windows/CWindowObject.h"
+#include "../widgets/Images.h"
+#include "../../lib/networkPacks/PacksForClient.h"
+
+VCMI_LIB_NAMESPACE_BEGIN
+
+class CBuilding;
+class CGTownInstance;
+class CSpell;
+struct CStructure;
+class CGHeroInstance;
+class CCreature;
+
+VCMI_LIB_NAMESPACE_END
+
+class CButton;
+class CCastleBuildings;
+class CCreaturePic;
+class CGStatusBar;
+class CLabel;
+class CMinorResDataBar;
+class CPicture;
+class CResDataBar;
+class CTextBox;
+class CTownList;
+class CGarrisonInt;
+class CComponent;
+class CComponentBox;
+class LRClickableArea;
+class LRClickableAreaWText;
+class CTextInputWithConfirm;
+class CSlider;
+
+/// Building "button"
+class CBuildingRect : public CShowableAnim
+{
+	std::string getSubtitle();
+public:
+	enum EBuildingCreationAnimationPhases : uint32_t
+	{
+		BUILDING_APPEAR_TIMEPOINT = 500, //500 msec building appears: 0->100% transparency
+		BUILDING_WHITE_BORDER_TIMEPOINT = 900, //400 msec border glows from white to yellow
+		BUILDING_YELLOW_BORDER_TIMEPOINT = 1100, //200 msec border glows from yellow to normal (dark orange)
+		BUILD_ANIMATION_FINISHED_TIMEPOINT = 2100, // 1000msec once border is back to yellow nothing happens (this stage is basically removed by HD Mod)
+
+		BUILDING_FRAME_TIME = 150 // confirmed H3 timing: 150 ms for each building animation frame
+	};
+
+	/// returns building associated with this structure
+	const CBuilding * getBuilding();
+
+	CCastleBuildings * parent;
+	const CGTownInstance * town;
+	const CStructure* str;
+	std::shared_ptr<IImage> border;
+	std::shared_ptr<IImage> area;
+
+	ui32 stateTimeCounter;//For building construction - current stage in animation
+
+	CBuildingRect(CCastleBuildings * Par, const CGTownInstance *Town, const CStructure *Str);
+	bool operator<(const CBuildingRect & p2) const;
+	void hover(bool on) override;
+	void clickPressed(const Point & cursorPosition) override;
+	void showPopupWindow(const Point & cursorPosition) override;
+	void mouseMoved (const Point & cursorPosition, const Point & lastUpdateDistance) override;
+	bool receiveEvent(const Point & position, int eventType) const override;
+	void tick(uint32_t msPassed) override;
+	void show(Canvas & to) override;
+	void showAll(Canvas & to) override;
+};
+
+/// Dwelling info box - right-click screen for dwellings
+class CDwellingInfoBox : public CWindowObject
+{
+	std::shared_ptr<CLabel> title;
+	std::shared_ptr<CCreaturePic> animation;
+	std::shared_ptr<CLabel> available;
+	std::shared_ptr<CLabel> costPerTroop;
+
+	std::vector<std::shared_ptr<CAnimImage>> resPicture;
+	std::vector<std::shared_ptr<CLabel>> resAmount;
+public:
+	CDwellingInfoBox(int centerX, int centerY, const CGTownInstance * Town, int level);
+	~CDwellingInfoBox();
+};
+
+class HeroSlots;
+/// Hero icon slot
+class CHeroGSlot : public CIntObject
+{
+	std::shared_ptr<CAnimImage> portrait;
+	std::shared_ptr<CAnimImage> flag;
+	std::shared_ptr<CAnimImage> selection; //selection border. nullptr if not selected
+
+	HeroSlots * owner;
+	const CGHeroInstance * hero;
+	int upg; //0 - up garrison, 1 - down garrison
+
+	auto getUpgradableSlots(const CArmedInstance *obj) const;
+
+public:
+	CHeroGSlot(int x, int y, int updown, const CGHeroInstance *h, HeroSlots * Owner);
+	~CHeroGSlot();
+
+	bool isSelected() const;
+
+	void setHighlight(bool on);
+	void set(const CGHeroInstance * newHero);
+
+	void hover (bool on) override;
+	void gesture(bool on, const Point & initialPosition, const Point & finalPosition) override;
+	void clickPressed(const Point & cursorPosition) override;
+	void showPopupWindow(const Point & cursorPosition) override;
+	void deactivate() override;
+};
+
+/// Two hero slots that can interact with each other
+class HeroSlots : public CIntObject
+{
+public:
+	bool showEmpty;
+	const CGTownInstance * town;
+
+	std::shared_ptr<CGarrisonInt> garr;
+	std::shared_ptr<CHeroGSlot> garrisonedHero;
+	std::shared_ptr<CHeroGSlot> visitingHero;
+
+	HeroSlots(const CGTownInstance * town, Point garrPos, Point visitPos, std::shared_ptr<CGarrisonInt> Garrison, bool ShowEmpty);
+	~HeroSlots();
+
+	void update();
+	void swapArmies(); //exchange garrisoned and visiting heroes or move hero to\from garrison
+};
+
+/// Class for town screen management (town background and structures)
+class CCastleBuildings : public CIntObject
+{
+	std::shared_ptr<CPicture> background;
+	//List of buildings and structures that can represent them
+	std::map<BuildingID, std::vector<const CStructure *> > groups;
+	// actual IntObject's visible on screen
+	std::vector<std::shared_ptr<CBuildingRect>> buildings;
+
+	const CGTownInstance * town;
+
+	const CGHeroInstance* getHero();//Select hero for buildings usage
+
+	void enterBlacksmith(BuildingID building, ArtifactID artifactID);//support for blacksmith + ballista yard
+	void enterBuilding(BuildingID building);//for buildings with simple description + pic left-click messages
+	void enterCastleGate(BuildingID building);
+	void enterFountain(const BuildingID & building, BuildingSubID::EBuildingSubID subID, BuildingID upgrades);//Rampart's fountains
+	
+	void openMagesGuild();
+	void openTownHall();
+
+	void recreate();
+
+	void drawOverlays(Canvas & to, std::vector<std::shared_ptr<CBuildingRect>> buildingRects);
+	void show(Canvas & to) override;
+public:
+	CBuildingRect * selectedBuilding;
+
+	CCastleBuildings(const CGTownInstance * town);
+	~CCastleBuildings();
+
+	void enterDwelling(int level);
+	void enterTownHall();
+	void enterRewardable(BuildingID building);
+	void enterMagesGuild();
+	void enterAnyMarket();
+	void enterAnyThievesGuild();
+	void enterBank(BuildingID building);
+	void enterToTheQuickRecruitmentWindow();
+
+	bool buildingTryActivateCustomUI(BuildingID buildingToTest, BuildingID buildingTarget);
+	void buildingClicked(BuildingID building);
+	void addBuilding(BuildingID building);
+	void removeBuilding(BuildingID building);//FIXME: not tested!!!
+};
+
+/// Creature info window
+class CCreaInfo : public CIntObject
+{
+	const CGTownInstance * town;
+	CreatureID creature;
+	int level;
+	bool showAvailable;
+
+	std::shared_ptr<CAnimImage> picture;
+	std::shared_ptr<CLabel> label;
+	std::shared_ptr<CPicture> arenaSummonState;
+
+	std::string genGrowthText();
+	const CBuilding * getArenaDwelling() const;
+
+public:
+	CCreaInfo(Point position, const CGTownInstance * Town, int Level, bool compact=false, bool _showAvailable=false);
+
+	void update();
+	void refreshArenaTownSummon();
+	void hover(bool on) override;
+	void clickPressed(const Point & cursorPosition) override;
+	void showPopupWindow(const Point & cursorPosition) override;
+	bool getShowAvailable();
+};
+
+/// Town hall and fort icons for town screen
+class CTownInfo : public CIntObject
+{
+	const CGTownInstance * town;
+	const CBuilding * building;
+public:
+	std::shared_ptr<CAnimImage> picture;
+	//if (townHall) hall-capital else fort - castle
+	CTownInfo(int posX, int posY, const CGTownInstance * town, bool townHall);
+
+	void hover(bool on) override;
+	void showPopupWindow(const Point & cursorPosition) override;
+};
+
+/// Class which manages the castle window
+class CCastleInterface final : public CStatusbarWindow, public IGarrisonHolder, public IArtifactsHolder
+{
+	std::shared_ptr<CTextInputWithConfirm> title;
+	std::shared_ptr<CLabel> income;
+	std::shared_ptr<CAnimImage> icon;
+	std::shared_ptr<CPicture> arenaSummonsIcon;
+	std::shared_ptr<CLabel> arenaSummonsCount;
+
+	std::shared_ptr<CPicture> panel;
+	std::shared_ptr<CResDataBar> resdatabar;
+
+	std::shared_ptr<CTownInfo> hall;
+	std::shared_ptr<CTownInfo> fort;
+
+	std::shared_ptr<CButton> exit;
+	std::shared_ptr<CButton> fastTownHall;
+	std::shared_ptr<CButton> fastArmyPurchase;
+	std::shared_ptr<LRClickableArea> fastMarket;
+	std::shared_ptr<LRClickableArea> fastWiki;
+
+	std::vector<std::shared_ptr<CCreaInfo>> creainfo;//small icons of creatures (bottom-left corner);
+
+public:
+	std::shared_ptr<CTownList> townlist;
+
+	//TODO: move to private
+	const CGTownInstance * town;
+	std::shared_ptr<HeroSlots> heroes;
+	std::shared_ptr<CCastleBuildings> builds;
+
+	std::shared_ptr<CGarrisonInt> garr;
+
+	//from - previously selected castle (if any)
+	CCastleInterface(const CGTownInstance * Town, const CGTownInstance * from = nullptr);
+	~CCastleInterface();
+
+	void updateArtifacts() override;
+	void updateGarrisons() override;
+	bool holdsGarrison(const CArmedInstance * army) override;
+
+	void castleTeleport(int where);
+	void townChange();
+	void keyPressed(EShortcut key) override;
+
+	void close() override;
+	/// Called only after the server confirmed an arena virtual-town LEAVE.
+	void closeAfterArenaLeave();
+	void addBuilding(BuildingID bid);
+	void removeBuilding(BuildingID bid);
+	void recreateIcons();
+	void creaturesChangedEventHandler();
+	void refreshArenaTownSummons();
+	void refreshArenaSummonsRemaining();
+};
+
+/// Hall window where you can build things
+class CHallInterface : public CStatusbarWindow
+{
+	class CBuildingBox : public CIntObject
+	{
+		const CGTownInstance * town;
+		const CBuilding * building;
+
+		EBuildingState state;
+
+		std::shared_ptr<CAnimImage> header;
+		std::shared_ptr<CAnimImage> icon;
+		std::shared_ptr<CAnimImage> mark;
+		std::shared_ptr<CLabel> name;
+	public:
+		CBuildingBox(int x, int y, const CGTownInstance * Town, const CBuilding * Building);
+		void hover(bool on) override;
+		void clickPressed(const Point & cursorPosition) override;
+		void showPopupWindow(const Point & cursorPosition) override;
+	};
+	const CGTownInstance * town;
+
+	std::vector<std::vector<std::shared_ptr<CBuildingBox>>> boxes;
+	std::shared_ptr<CLabel> title;
+	std::shared_ptr<CMinorResDataBar> resdatabar;
+	std::shared_ptr<CButton> exit;
+	void rebuildBuildingBoxes();
+
+public:
+	CHallInterface(const CGTownInstance * Town);
+	bool isForTown(ObjectInstanceID townID) const;
+	void refreshArenaBuildGate();
+};
+
+///  Window where you can decide to buy a building or not
+class CBuildWindow: public CStatusbarWindow
+{
+	const CGTownInstance * town;
+	const CBuilding * building;
+	EBuildingState buildingState;
+	EBuildingState baseBuildingState;
+	BuildingID arenaBuildGateRequired = BuildingID::NONE;
+	bool arenaQuoteRequested = false;
+	bool arenaQuotePending = false;
+	bool arenaSubmitPending = false;
+	uint32_t arenaQuoteRevision = 0;
+	CreatureID arenaQuoteCreature;
+	std::vector<ArenaBuildLevelQuote> arenaQuotes;
+
+	std::shared_ptr<CAnimImage> icon;
+	std::shared_ptr<CLabel> name;
+	std::shared_ptr<CTextBox> description;
+	std::shared_ptr<CTextBox> stateText;
+	std::shared_ptr<CComponentBox> cost;
+	std::shared_ptr<CSlider> arenaLevelSlider;
+	std::shared_ptr<CLabel> arenaLevelText;
+	std::shared_ptr<CLabel> arenaAmountText;
+	std::shared_ptr<CLabel> arenaThresholdText;
+	std::shared_ptr<CIntObject> arenaQuotePanel;
+	std::shared_ptr<CIntObject> arenaQuotePanelBorder;
+	std::vector<std::shared_ptr<CIntObject>> arenaSummonCostItems;
+	std::shared_ptr<CTextBox> arenaSummonCostText;
+
+	std::shared_ptr<CButton> buy;
+	std::shared_ptr<CButton> cancel;
+
+	std::string getTextForState(EBuildingState state);
+	void buyFunc();
+	void requestArenaQuotes();
+	void refreshArenaQuote(int level);
+	void rebuildCost(const TResources & resources);
+	void clearArenaQuoteControls();
+	void setArenaError(const std::string & reason);
+	std::string getArenaBuildGateText();
+	bool canUseArenaBuildLevel() const;
+public:
+	CBuildWindow(const CGTownInstance *Town, const CBuilding * building, EBuildingState State, bool rightClick);
+	void activate() override;
+	void applyArenaBuildLevelState(const SetArenaBuildLevelState & state);
+	bool isForTown(ObjectInstanceID townID) const;
+	void refreshArenaBuildGate();
+};
+
+//Small class to display
+class LabeledValue : public CIntObject
+{
+	std::string hoverText;
+	std::shared_ptr<CLabel> name;
+	std::shared_ptr<CLabel> value;
+	void init(std::string name, std::string descr, int min, int max);
+
+public:
+	LabeledValue(Rect size, std::string name, std::string descr, int min, int max);
+	LabeledValue(Rect size, std::string name, std::string descr, int val);
+	void hover(bool on) override;
+};
+
+/// The fort screen where you can afford units
+class CFortScreen : public CStatusbarWindow
+{
+	class RecruitArea : public CIntObject
+	{
+		const CGTownInstance * town;
+		int level;
+
+		std::string hoverText;
+		std::shared_ptr<CLabel> availableCount;
+
+		std::vector<std::shared_ptr<LabeledValue>> values;
+		std::shared_ptr<CPicture> icons;
+		std::shared_ptr<CPicture> arenaSummonState;
+		std::shared_ptr<CAnimImage> buildingIcon;
+		std::shared_ptr<CLabel> buildingName;
+
+		const CCreature * getMyCreature();
+		const CBuilding * getMyBuilding();
+	public:
+		RecruitArea(int posX, int posY, const CGTownInstance *town, int level);
+
+		void creaturesChangedEventHandler();
+		void refreshArenaTownSummon();
+		void hover(bool on) override;
+		void clickPressed(const Point & cursorPosition) override;
+		void showPopupWindow(const Point & cursorPosition) override;
+
+	};
+	std::shared_ptr<CLabel> title;
+	ObjectInstanceID townId;
+	std::vector<std::shared_ptr<RecruitArea>> recAreas;
+	std::shared_ptr<CMinorResDataBar> resdatabar;
+	std::shared_ptr<CButton> exit;
+
+	ImagePath getBgName(const CGTownInstance * town);
+
+public:
+	CFortScreen(const CGTownInstance * town);
+
+	void creaturesChangedEventHandler();
+	bool isForTown(ObjectInstanceID town) const;
+	void refreshArenaTownSummons();
+};
+
+class CSpellResearchDialog : public CStatusbarWindow
+{
+	std::shared_ptr<CLabel> title;
+	std::shared_ptr<CTextBox> description;
+	std::shared_ptr<CComponentBox> components;
+	std::shared_ptr<CButton> acceptButton;
+	std::shared_ptr<CButton> rerollButton;
+	std::shared_ptr<CButton> closeButton;
+
+public:
+	CSpellResearchDialog(
+		const std::string & textToShow,
+		const std::vector<std::shared_ptr<CComponent>> & components,
+		const CGTownInstance * town,
+		SpellID oldSpell,
+		bool canAfford);
+};
+
+/// The mage guild screen where you can see which spells you have
+class CMageGuildScreen : public CStatusbarWindow
+{
+	class Scroll : public CIntObject
+	{
+		const CSpell * spell;
+		std::shared_ptr<CAnimImage> image;
+		ObjectInstanceID townId;
+
+	public:
+		Scroll(Point position, const CSpell *Spell, ObjectInstanceID townId);
+		void clickPressed(const Point & cursorPosition) override;
+		void showPopupWindow(const Point & cursorPosition) override;
+		void hover(bool on) override;
+	};
+
+	class ScrollAllSpells : public CIntObject
+	{
+		std::shared_ptr<CAnimImage> image;
+		std::shared_ptr<LRClickableAreaWText> text;
+
+	public:
+		ScrollAllSpells(Point position, const std::string & buildingName);
+	};
+
+	std::shared_ptr<CPicture> window;
+	std::shared_ptr<CButton> exit;
+	std::vector<std::shared_ptr<Scroll>> spells;
+	std::vector<std::shared_ptr<CAnimImage>> emptyScrolls;
+	std::vector<std::shared_ptr<ScrollAllSpells>> auroraBorealisScrolls;
+
+	std::shared_ptr<CMinorResDataBar> resdatabar;
+
+	ObjectInstanceID townId;
+
+public:
+	CMageGuildScreen(CCastleInterface * owner, const ImagePath & image);
+	void updateSpells(ObjectInstanceID tID);
+};
+
+/// The blacksmith window where you can buy available in town war machine
+class CBlacksmithDialog : public CStatusbarWindow
+{
+	std::shared_ptr<CButton> buy;
+	std::shared_ptr<CButton> cancel;
+	std::shared_ptr<CPicture> animBG;
+	std::shared_ptr<CCreatureAnim> anim;
+	std::shared_ptr<CLabel> title;
+	std::shared_ptr<CAnimImage> costIcon;
+	std::shared_ptr<CLabel> costText;
+	std::shared_ptr<CLabel> costValue;
+
+public:
+	CBlacksmithDialog(bool possible, ArtifactID newArtifact, ArtifactID existingArtifact, ObjectInstanceID hid);
+};

@@ -1,0 +1,4 @@
+include(base/msvc-intel)
+
+[settings]
+arch=x86_64

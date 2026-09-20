@@ -1,0 +1,2 @@
+[replace_requires]
+zlib/*: zlib/[*]@system

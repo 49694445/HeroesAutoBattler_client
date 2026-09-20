@@ -1,0 +1,370 @@
+{
+  "items": [
+    {
+      "type": "texture",
+      "image": "DiBoxBck",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 250,
+        "h": 212
+      }
+    },
+    {
+      "type": "slider",
+      "name": "slider",
+      "position": {
+        "x": 234,
+        "y": 2
+      },
+      "size": 208,
+      "style": "blue",
+      "orientation": "vertical",
+      "itemsVisible": 8,
+      "itemsTotal": 8,
+      "callback": "sliderMove",
+      "scrollBounds": {
+        "x": -234,
+        "y": 0,
+        "w": 250,
+        "h": 208
+      }
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 2
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 28
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 54
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 80
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 106
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 132
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 158
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    },
+    {
+      "type": "item",
+      "position": {
+        "x": 0,
+        "y": 184
+      },
+      "items": [
+        {
+          "type": "label",
+          "name": "labelName",
+          "font": "small",
+          "alignment": "left",
+          "color": "white",
+          "position": {
+            "x": 7,
+            "y": 13
+          }
+        },
+        {
+          "type": "transparentFilledRectangle",
+          "name": "hoverImage",
+          "rect": {
+            "x": 1,
+            "y": 0,
+            "w": 232,
+            "h": 26
+          },
+          "color": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "colorLine": [
+            255,
+            255,
+            0,
+            255
+          ]
+        }
+      ]
+    }
+  ]
+}

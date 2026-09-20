@@ -1,0 +1,97 @@
+/*
+ * MinizipExtensions.h, part of VCMI engine
+ *
+ * Authors: listed in file AUTHORS in main folder
+ *
+ * License: GNU General Public License v2.0 or later
+ * Full text of license available in license.txt file, in main folder
+ *
+ */
+#pragma once
+
+#if __has_include(<minizip-ng/unzip.h>)
+#include <minizip-ng/unzip.h>
+#include <minizip-ng/zip.h>
+#include <minizip-ng/ioapi.h>
+#else
+#include <minizip/unzip.h>
+#include <minizip/zip.h>
+#include <minizip/ioapi.h>
+#endif
+
+// system zlib on old Androids isn't capable of using _64 functions: https://github.com/madler/zlib/pull/436
+#if defined(__ANDROID_API__) && (__ANDROID_API__ < 24)
+#define MINIZIP_NEEDS_32BIT_FUNCS 1
+#endif
+
+VCMI_LIB_NAMESPACE_BEGIN
+
+class CInputStream;
+class CInputOutputStream;
+class CMemoryBuffer;
+
+class DLL_LINKAGE CIOApi
+{
+public:
+	virtual ~CIOApi() = default;
+
+	virtual zlib_filefunc64_def getApiStructure() = 0;
+};
+
+///redirects back to minizip ioapi
+//todo: replace with Virtual FileSystem interface
+class DLL_LINKAGE CDefaultIOApi: public CIOApi
+{
+public:
+	zlib_filefunc64_def getApiStructure() override;
+#if MINIZIP_NEEDS_32BIT_FUNCS
+	zlib_filefunc_def getApiStructure32();
+#endif
+};
+
+///redirects all file IO to single stream
+class DLL_LINKAGE CProxyIOApi: public CIOApi
+{
+public:
+	CProxyIOApi(CInputOutputStream * buffer);
+	~CProxyIOApi() override;
+
+	zlib_filefunc64_def getApiStructure() override;
+private:
+	CInputOutputStream * openFile(const boost::filesystem::path & filename, int mode);
+
+	CInputOutputStream * data;
+
+	static voidpf ZCALLBACK openFileProxy(voidpf opaque, const void * filename, int mode);
+	static uLong ZCALLBACK readFileProxy(voidpf opaque, voidpf stream, void * buf, uLong size);
+	static uLong ZCALLBACK writeFileProxy(voidpf opaque, voidpf stream, const void * buf, uLong size);
+	static ZPOS64_T ZCALLBACK tellFileProxy(voidpf opaque, voidpf stream);
+	static long ZCALLBACK seekFileProxy(voidpf  opaque, voidpf stream, ZPOS64_T offset, int origin);
+	static int ZCALLBACK closeFileProxy(voidpf opaque, voidpf stream);
+	static int ZCALLBACK errorFileProxy(voidpf opaque, voidpf stream);
+};
+
+///redirects all file IO to single stream read-only
+class DLL_LINKAGE CProxyROIOApi: public CIOApi
+{
+public:
+	CProxyROIOApi(CInputStream * buffer);
+	~CProxyROIOApi() override;
+
+	zlib_filefunc64_def getApiStructure() override;
+private:
+	CInputStream * openFile(const boost::filesystem::path & filename, int mode);
+
+	CInputStream * data;
+
+	static voidpf ZCALLBACK openFileProxy(voidpf opaque, const void * filename, int mode);
+	static uLong ZCALLBACK readFileProxy(voidpf opaque, voidpf stream, void * buf, uLong size);
+	static uLong ZCALLBACK writeFileProxy(voidpf opaque, voidpf stream, const void * buf, uLong size);
+	static ZPOS64_T ZCALLBACK tellFileProxy(voidpf opaque, voidpf stream);
+	static long ZCALLBACK seekFileProxy(voidpf  opaque, voidpf stream, ZPOS64_T offset, int origin);
+	static int ZCALLBACK closeFileProxy(voidpf opaque, voidpf stream);
+	static int ZCALLBACK errorFileProxy(voidpf opaque, voidpf stream);
+};
+
+
+VCMI_LIB_NAMESPACE_END
