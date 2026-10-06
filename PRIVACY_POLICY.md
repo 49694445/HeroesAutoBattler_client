@@ -1,5 +1,5 @@
 
-**Privacy Policy**
+**Privacy Policy** 
 
 This privacy policy applies to the Heroes Auto Battler app for mobile devices, together with any related services operated by daikewei (collectively, the "Application"). daikewei is hereby referred to as the "Service Provider".
 
